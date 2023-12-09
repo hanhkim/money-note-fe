@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Modal,
   ModalContent,
@@ -15,7 +15,12 @@ import FieldSection from "@/components/field-section/FieldSection";
 import SelectField from "@/components/field/SelectField";
 import TextareaField from "@/components/field/TextareaField";
 import DatePickerField from "@/components/field/DatePickerField";
-import { useGetCategoryList } from "./utils";
+import {
+  useAddTransaction,
+  useGetCategoryList,
+  useGetWalletList,
+} from "./utils";
+import { ITransaction } from "@/models/Transaction.model";
 
 interface ITransactionModal {
   isOpen: boolean;
@@ -23,42 +28,24 @@ interface ITransactionModal {
   onClose?: () => void;
 }
 
-export interface IForm {
-  amount: number;
-  category: number;
-  note: string;
-  walletId: string;
-  date: string;
-  attaches?: any;
-}
-
 const TransactionModal: React.FC<ITransactionModal> = ({
   isOpen,
   placement,
   onClose,
 }) => {
-  useGetCategoryList();
-  const categories = [
-    {
-      value: "123",
-      label: "Eating",
-    },
-    {
-      value: "1234",
-      label: "Cafe",
-    },
-  ];
+  const { categories } = useGetCategoryList();
+  const { wallets } = useGetWalletList();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    control,
-    formState: { errors },
-  } = useForm<IForm>();
+  const walletOptions = useMemo(() => {
+    return wallets.map((w: any) => ({ value: w.id, label: w.name }));
+  }, [wallets]);
 
-  const onSubmit: SubmitHandler<IForm> = (data) => {
-    console.log("data", data);
+  const { mutateAsync } = useAddTransaction();
+
+  const { handleSubmit, control } = useForm<ITransaction>();
+
+  const onSubmit: SubmitHandler<ITransaction> = async (data: ITransaction) => {
+    await mutateAsync(data);
   };
 
   return (
@@ -96,7 +83,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     title="Category"
                     component={
                       <SelectField
-                        name="category"
+                        name="categoryId"
                         control={control}
                         options={categories}
                       />
@@ -119,7 +106,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                       <SelectField
                         name="walletId"
                         control={control}
-                        options={categories}
+                        options={walletOptions}
                       />
                     }
                   />
@@ -133,7 +120,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     title="For person"
                     component={
                       <InputField
-                        name="forWhom"
+                        name="toWhom"
                         control={control}
                         placeholder="Enter your description"
                         fullWidth

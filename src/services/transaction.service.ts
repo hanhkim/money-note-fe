@@ -1,14 +1,19 @@
+import { ITransaction } from "@/models/Transaction.model";
 import BaseHttpService from "./base.service";
 
-const path = "categories";
+const path = "transactions";
 
 class TransactionService extends BaseHttpService {
   constructor() {
     super();
   }
 
-  getCategoryById = (id: string) => {
-    return this.get(`account/${id}`); // update
+  getTransactions = () => {
+    return this.get(path);
+  };
+
+  addTransaction = (data: ITransaction) => {
+    return this.post(path, data);
   };
 }
 

@@ -27,7 +27,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  console.log("RootLayout :>> ", RootLayout);
   return (
     <html lang="en">
       <body className={lexend.className}>

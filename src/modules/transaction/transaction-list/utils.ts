@@ -1,11 +1,19 @@
 import transactionService from "@/services/transaction.service";
+import { useQueries, useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { groupBy } from "lodash";
+import { ITransaction } from "@/models/Transaction.model";
 
-export const useGetCategoryById = () => {
-  const handleGet = async () => {
-    const data = await transactionService.getCategoryById(
-      "823f664e-1ec8-4351-b88c-45fe6ccf2860"
-    );
-  };
+export const useGetTransactions = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["transactionService.getTransactions"],
+    queryFn: () => transactionService.getTransactions(),
+    select: (result) => {
+      return groupBy(result, "date");
+    },
+  });
 
-  handleGet();
+  console.log("data :>> ", data);
+
+  return { transactionsByDate: data, isLoading };
 };

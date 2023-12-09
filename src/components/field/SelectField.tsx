@@ -11,14 +11,14 @@ export interface ISelectField {
 
 export interface ISelectOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 const SelectField: React.FC<ISelectField> = ({
   name,
   control,
   rules,
-  options,
+  options = [],
 }) => {
   return (
     <Controller

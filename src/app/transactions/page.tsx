@@ -1,12 +1,27 @@
+import React from "react";
 import { Layout } from "@/components/layout";
 import { TransactionContainer } from "@/modules/transaction";
-import React from "react";
+import categoryService from "@/services/category.service";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import getQueryClient from "../getQueryClient";
 
-const Transactions = () => {
+const Page = async () => {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["getCategoryList"],
+    queryFn: () => categoryService.getCategories(),
+  });
+  const dehydratedState = dehydrate(queryClient);
+  console.log("dehydratee :>> ", dehydratedState);
+
+  // HydrationBoundary is used for prefetch data from server side rendering,
+  // reference to this post to understand more: https://tanstack.com/query/v4/docs/react/guides/ssr
   return (
-    <Layout>
-      <TransactionContainer />
-    </Layout>
+    <HydrationBoundary state={dehydratedState}>
+      <Layout>
+        <TransactionContainer />
+      </Layout>
+    </HydrationBoundary>
   );
 };
-export default Transactions;
+export default Page;

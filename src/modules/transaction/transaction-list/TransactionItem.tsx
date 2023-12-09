@@ -1,7 +1,12 @@
+import { ITransaction } from "@/models/Transaction.model";
 import Image from "next/image";
 import React from "react";
 
-const TransactionItem = () => {
+export interface ITransactionItem {
+  transaction: ITransaction;
+}
+
+const TransactionItem: React.FC<ITransactionItem> = ({ transaction }) => {
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-3 items-center">
@@ -11,9 +16,9 @@ const TransactionItem = () => {
           width={50}
           height={50}
         />
-        <span>Eating</span>
+        <span>{transaction.categoryId}</span>
       </div>
-      <div className="text-[red]">-500000</div>
+      <div className="text-[red]">{`-${transaction.amount}`}</div>
     </div>
   );
 };

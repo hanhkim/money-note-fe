@@ -9,46 +9,97 @@ import {
   ListboxItem,
 } from "@nextui-org/react";
 import TransactionItem from "./TransactionItem";
+import { useGetTransactions } from "./utils";
+import { ITransaction } from "@/models/Transaction.model";
+import { sumBy } from "lodash";
+import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
+
+dayjs.extend(updateLocale);
+
+dayjs.updateLocale("en", {
+  months: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+});
 
 const TransactionList = () => {
+  const { transactionsByDate = {} } = useGetTransactions();
+
   return (
     <div className="flex flex-col gap-4">
-      <TransactionBlock />
-      <TransactionBlock />
+      {Object.entries(transactionsByDate)?.map(([date, transactions]) => (
+        <TransactionBlock
+          transactions={transactions as ITransaction[]}
+          date={date}
+          key={date}
+        />
+      ))}
     </div>
   );
 };
 
 export default TransactionList;
 
-export const TransactionBlock = () => {
+export interface ITransactionBlock {
+  transactions: ITransaction[];
+  date: string;
+}
+
+export const TransactionBlock: React.FC<ITransactionBlock> = ({
+  transactions,
+  date,
+}) => {
   return (
     <Card className="p-4">
       <CardHeader className="flex justify-between">
-        <div className="flex gap-3 items-center">
-          <div className="text-xl text-slate-500">09</div>
-          <div>
-            <div className="text-base">November, 2023</div>
-            <div>
-              <Chip variant="bordered" size="sm">
-                Thursday
-              </Chip>
-            </div>
-          </div>
-        </div>
-        <div className="text-[red]">-500.000</div>
+        <TransactionDateHeader transactions={transactions} date={date} />
       </CardHeader>
       <Divider />
       <CardBody className="flex flex-col gap-4">
         <Listbox color="default" variant="faded">
-          <ListboxItem key="new">
-            <TransactionItem />
-          </ListboxItem>
-          <ListboxItem key="new">
-            <TransactionItem />
-          </ListboxItem>
+          {transactions?.map((transaction: ITransaction) => (
+            <ListboxItem key={transaction.id}>
+              <TransactionItem transaction={transaction} />
+            </ListboxItem>
+          ))}
         </Listbox>
       </CardBody>
     </Card>
+  );
+};
+
+export const TransactionDateHeader: React.FC<{
+  transactions: ITransaction[];
+  date: string;
+}> = ({ transactions, date }) => {
+  const sumAmount = sumBy(transactions, "amount");
+
+  return (
+    <>
+      <div className="flex gap-3 items-center">
+        <div className="text-xl text-slate-500">{dayjs(date).format("D")}</div>
+        <div>
+          <div className="text-base">{dayjs(date).format("MMMM, YYYY")}</div>
+          <div>
+            <Chip variant="bordered" size="sm">
+              {dayjs(date).format("dddd")}
+            </Chip>
+          </div>
+        </div>
+      </div>
+      <div className="text-[red]">{sumAmount || "-"}</div>
+    </>
   );
 };
