@@ -5,7 +5,7 @@ import TransactionFooter from "./TransactionFooter";
 
 const TransactionContainer = () => {
   return (
-    <div className="p-4">
+    <div className="p-4 h-full">
       <TransactionTab />
       <TransactionFooter />
     </div>

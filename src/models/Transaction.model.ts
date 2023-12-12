@@ -18,4 +18,13 @@ export interface ITransaction {
   walletId: string;
 
   type: ETransactionType;
+
+  category: ICategory;
+}
+
+export interface ICategory {
+  id: number;
+  name: string;
+  parentId: number;
+  type: string;
 }

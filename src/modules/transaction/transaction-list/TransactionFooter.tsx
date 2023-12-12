@@ -9,7 +9,7 @@ const TransactionFooter = () => {
 
   return (
     <>
-      <div className="bottom-[16px] p-4 rounded absolute">
+      <div className=" p-4 rounded  shadow-lg w-full">
         <div className="text-center">
           <Button
             color="primary"

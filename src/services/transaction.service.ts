@@ -8,8 +8,9 @@ class TransactionService extends BaseHttpService {
     super();
   }
 
-  getTransactions = () => {
-    return this.get(path);
+  getTransactions = (month: number) => {
+    const params = { month };
+    return this.get(path, { params });
   };
 
   addTransaction = (data: ITransaction) => {

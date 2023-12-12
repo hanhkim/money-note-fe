@@ -110,6 +110,7 @@ class BaseHttpService {
 
   async get(endpoint: string, options = {}): Promise<any> {
     const fullUrl = `${this.baseUrl}/${endpoint}`;
+    console.log("options :>> ", options);
     return this.instance.get(endpoint, options);
   }
 

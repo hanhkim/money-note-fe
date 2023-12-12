@@ -8,7 +8,7 @@ const Layout = ({ children }: { children?: ReactNode }) => {
       <Sidebar />
       <div className="flex-1 text-white">
         <Header />
-        <div>{children}</div>
+        <div className="h-[calc(100vh-65px)]">{children}</div>
       </div>
     </div>
   );

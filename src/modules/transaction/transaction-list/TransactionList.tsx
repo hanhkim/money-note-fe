@@ -14,6 +14,11 @@ import { ITransaction } from "@/models/Transaction.model";
 import { sumBy } from "lodash";
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
+import {
+  ITransactionListStore,
+  useTransactionListStore,
+} from "./transactionList.store";
+import { pick } from "lodash";
 
 dayjs.extend(updateLocale);
 
@@ -38,14 +43,16 @@ const TransactionList = () => {
   const { transactionsByDate = {} } = useGetTransactions();
 
   return (
-    <div className="flex flex-col gap-4">
-      {Object.entries(transactionsByDate)?.map(([date, transactions]) => (
-        <TransactionBlock
-          transactions={transactions as ITransaction[]}
-          date={date}
-          key={date}
-        />
-      ))}
+    <div className="">
+      <div className="flex flex-col gap-4">
+        {Object.entries(transactionsByDate)?.map(([date, transactions]) => (
+          <TransactionBlock
+            transactions={transactions as ITransaction[]}
+            date={date}
+            key={date}
+          />
+        ))}
+      </div>
     </div>
   );
 };

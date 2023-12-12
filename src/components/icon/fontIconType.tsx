@@ -943,4 +943,7 @@ export type FontIconType =
   | "receipt_long"
   | "grid_view"
   | "search_check"
-  | "library_add_check";
+  | "library_add_check"
+  | "keyboard_double_arrow_left"
+  | "keyboard_double_arrow_right"
+  | "calendar_month";

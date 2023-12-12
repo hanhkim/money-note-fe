@@ -16,7 +16,10 @@ const TransactionItem: React.FC<ITransactionItem> = ({ transaction }) => {
           width={50}
           height={50}
         />
-        <span>{transaction.categoryId}</span>
+        <div>
+          <p className="text-lg">{transaction.category.name}</p>
+          <p className="text-xs">{transaction.note}</p>
+        </div>
       </div>
       <div className="text-[red]">{`-${transaction.amount}`}</div>
     </div>
