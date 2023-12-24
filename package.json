@@ -24,6 +24,7 @@
     "next": "14.0.2",
     "query-string": "^8.1.0",
     "react": "^18",
+    "react-calendar": "^4.7.0",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "zustand": "^4.4.7"

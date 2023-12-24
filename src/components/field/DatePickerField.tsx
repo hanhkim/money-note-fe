@@ -1,6 +1,7 @@
 import React from "react";
 import { InputProps } from "@nextui-org/react";
 import { Controller, Control } from "react-hook-form";
+import DatePicker from "../date-picker/DatePicker";
 
 export interface IDatePickerField extends InputProps {
   name: string;
@@ -24,7 +25,7 @@ const DatePickerField: React.FC<IDatePickerField> = ({
       render={({
         field: { onBlur, onChange, value },
         fieldState: { invalid, error },
-      }) => <input type="date" onChange={onChange} />}
+      }) => <DatePicker value={value} onChange={onChange} />}
     />
   );
 };

@@ -20,7 +20,7 @@ const instance: AxiosInstance = axios.create({
     const filteredParams = Object.fromEntries(
       Object.entries(params).filter(([_k, v]) => v)
     );
-
+    console.log("filterParams :>> ", filteredParams);
     return queryString.stringify(params, { arrayFormat: "comma" });
   },
 });

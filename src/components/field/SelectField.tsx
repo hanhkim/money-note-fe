@@ -7,6 +7,7 @@ export interface ISelectField {
   control?: Control<any>;
   rules?: object;
   options: ISelectOption[];
+  placeholder?: string;
 }
 
 export interface ISelectOption {
@@ -19,7 +20,10 @@ const SelectField: React.FC<ISelectField> = ({
   control,
   rules,
   options = [],
+  placeholder,
 }) => {
+  const [values, setValues] = React.useState(new Set([]));
+
   return (
     <Controller
       name={name}
@@ -28,19 +32,30 @@ const SelectField: React.FC<ISelectField> = ({
       render={({
         field: { onBlur, onChange, value },
         fieldState: { invalid, error },
-      }) => (
-        <Select
-          placeholder="Select an animal"
-          className="w-full"
-          onChange={onChange}
-        >
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </Select>
-      )}
+      }) => {
+        const selectedKeys = value
+          ? Array.isArray(value)
+            ? value
+            : [value.toString()]
+          : [];
+
+        return (
+          <Select
+            placeholder={placeholder}
+            className="w-full"
+            onChange={onChange}
+            selectedKeys={selectedKeys}
+            defaultSelectedKeys={selectedKeys}
+            items={options}
+          >
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </Select>
+        );
+      }}
     />
   );
 };

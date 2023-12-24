@@ -5,7 +5,7 @@ export interface ITransaction {
 
   amount: number;
 
-  categoryId: number;
+  categoryId: number | null;
 
   note: string;
 
@@ -13,7 +13,7 @@ export interface ITransaction {
 
   toWhom: string;
 
-  img: string;
+  img: any;
 
   walletId: string;
 
@@ -22,9 +22,17 @@ export interface ITransaction {
   category: ICategory;
 }
 
+export interface ITransactionForm
+  extends Omit<ITransaction, "categoryId" | "walletId" | "category" | "id"> {
+  categoryId: number | null;
+  walletId: null | string;
+  id?: string;
+}
+
 export interface ICategory {
   id: number;
   name: string;
   parentId: number;
   type: string;
+  icon?: string;
 }

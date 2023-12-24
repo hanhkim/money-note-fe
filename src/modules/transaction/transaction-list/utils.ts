@@ -1,6 +1,5 @@
 import transactionService from "@/services/transaction.service";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { groupBy } from "lodash";
 import { ITransaction } from "@/models/Transaction.model";
 import {

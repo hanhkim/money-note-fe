@@ -9,18 +9,20 @@ import {
   Button,
   ModalProps,
 } from "@nextui-org/react";
-import { useForm, SubmitHandler } from "react-hook-form";
 import InputField from "@/components/field/InputField";
 import FieldSection from "@/components/field-section/FieldSection";
 import SelectField from "@/components/field/SelectField";
 import TextareaField from "@/components/field/TextareaField";
 import DatePickerField from "@/components/field/DatePickerField";
 import {
-  useAddTransaction,
   useGetCategoryList,
   useGetWalletList,
+  useTransactionModal,
 } from "./utils";
-import { ITransaction } from "@/models/Transaction.model";
+import {
+  ITransactionDetailStore,
+  useTransactionDetailStore,
+} from "../transaction-list/transactionList.store";
 
 interface ITransactionModal {
   isOpen: boolean;
@@ -36,24 +38,57 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   const { categories } = useGetCategoryList();
   const { wallets } = useGetWalletList();
 
+  const openTransactionModal = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.openTransactionModal
+  );
+  const setOpenTransactionModal = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.setOpenTransactionModal
+  );
+  const setDetailTransaction = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.setDetailTransaction
+  );
+
   const walletOptions = useMemo(() => {
     return wallets.map((w: any) => ({ value: w.id, label: w.name }));
   }, [wallets]);
 
-  const { mutateAsync } = useAddTransaction();
+  const handleClose = () => {
+    setOpenTransactionModal(false);
+    onClose?.();
+    setDetailTransaction(null);
+  };
 
-  const { handleSubmit, control } = useForm<ITransaction>();
+  const { onSubmit, control, reset, setValue } =
+    useTransactionModal(handleClose);
 
-  const onSubmit: SubmitHandler<ITransaction> = async (data: ITransaction) => {
-    await mutateAsync(data);
+  const handleClickCancel = () => {
+    handleClose();
+    reset();
+  };
+
+  const isOpenModal = openTransactionModal || isOpen;
+
+  const handleChangeFile = (event: any) => {
+    if (event.target.files && event.target.files[0]) {
+      console.log("event.target :>> ", event.target.files);
+      const i = event.target.files[0];
+      setValue("img", i);
+    } else {
+      setValue("img", null);
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} placement={placement} onClose={onClose} size="lg">
+    <Modal
+      isOpen={isOpenModal}
+      placement={placement}
+      onClose={handleClickCancel}
+      size="lg"
+    >
       <ModalContent>
         {(onClose) => (
           <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={onSubmit}>
               <ModalHeader className="flex flex-col gap-1">
                 Transaction
               </ModalHeader>
@@ -107,6 +142,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                         name="walletId"
                         control={control}
                         options={walletOptions}
+                        placeholder="Choose wallet"
                       />
                     }
                   />
@@ -129,15 +165,28 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     }
                   />
                   <div>
-                    <p>Attaches</p>
+                    {/* <InputField
+                      name="img"
+                      control={control}
+                      placeholder="Enter your img"
+                      fullWidth
+                      size="sm"
+                      type="file"
+                      onChange={handleChangeFile}
+                    /> */}
+                    <input type="file" onChange={handleChangeFile} />
                   </div>
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={handleClickCancel}
+                >
                   Cancel
                 </Button>
-                <Button color="primary" onPress={onClose} type="submit">
+                <Button color="primary" type="submit">
                   Save
                 </Button>
               </ModalFooter>

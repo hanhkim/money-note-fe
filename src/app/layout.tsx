@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Lexend } from "next/font/google";
 
 import RQProvider from "@/providers/RQProvider";
+import "react-calendar/dist/Calendar.css";
 
 const lexend = Lexend({ subsets: ["latin"] });
 

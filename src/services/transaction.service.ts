@@ -16,6 +16,10 @@ class TransactionService extends BaseHttpService {
   addTransaction = (data: ITransaction) => {
     return this.post(path, data);
   };
+
+  getTransaction = (id: string): Promise<ITransaction> => {
+    return this.get(`${path}/${id}`);
+  };
 }
 
 const transactionService = new TransactionService();

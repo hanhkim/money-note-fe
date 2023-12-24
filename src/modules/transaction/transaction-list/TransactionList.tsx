@@ -15,10 +15,13 @@ import { sumBy } from "lodash";
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
 import {
+  ITransactionDetailStore,
   ITransactionListStore,
+  useTransactionDetailStore,
   useTransactionListStore,
 } from "./transactionList.store";
 import { pick } from "lodash";
+import { useGetDetailTransaction } from "../transaction-detail/utils";
 
 dayjs.extend(updateLocale);
 
@@ -68,6 +71,20 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
   transactions,
   date,
 }) => {
+  const setSelectedTransactionId = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.setSelectedTransactionId
+  );
+  const setOpenTransactionModal = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.setOpenTransactionModal
+  );
+
+  useGetDetailTransaction();
+
+  const handleClickItem = (transaction: ITransaction) => {
+    setSelectedTransactionId(transaction.id);
+    setOpenTransactionModal(true);
+  };
+
   return (
     <Card className="p-4">
       <CardHeader className="flex justify-between">
@@ -77,7 +94,10 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
       <CardBody className="flex flex-col gap-4">
         <Listbox color="default" variant="faded">
           {transactions?.map((transaction: ITransaction) => (
-            <ListboxItem key={transaction.id}>
+            <ListboxItem
+              key={transaction.id}
+              onClick={() => handleClickItem(transaction)}
+            >
               <TransactionItem transaction={transaction} />
             </ListboxItem>
           ))}
