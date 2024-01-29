@@ -23,6 +23,7 @@ import {
   ITransactionDetailStore,
   useTransactionDetailStore,
 } from "../transaction-list/transactionList.store";
+import RadioGroupField from "@/components/field/RadioGroupField";
 
 interface ITransactionModal {
   isOpen: boolean;
@@ -35,7 +36,6 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   placement,
   onClose,
 }) => {
-  const { categories } = useGetCategoryList();
   const { wallets } = useGetWalletList();
 
   const openTransactionModal = useTransactionDetailStore(
@@ -49,7 +49,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   );
 
   const walletOptions = useMemo(() => {
-    return wallets.map((w: any) => ({ value: w.id, label: w.name }));
+    return wallets?.map((w: any) => ({ value: w.id, label: w.name }));
   }, [wallets]);
 
   const handleClose = () => {
@@ -58,8 +58,12 @@ const TransactionModal: React.FC<ITransactionModal> = ({
     setDetailTransaction(null);
   };
 
-  const { onSubmit, control, reset, setValue } =
+  const { onSubmit, control, reset, setValue, watch, handleDeleteTransaction } =
     useTransactionModal(handleClose);
+
+  const type = watch("type");
+
+  const { categories } = useGetCategoryList(type);
 
   const handleClickCancel = () => {
     handleClose();
@@ -83,7 +87,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
       isOpen={isOpenModal}
       placement={placement}
       onClose={handleClickCancel}
-      size="lg"
+      size="2xl"
     >
       <ModalContent>
         {(onClose) => (
@@ -94,6 +98,20 @@ const TransactionModal: React.FC<ITransactionModal> = ({
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-4">
+                  <FieldSection
+                    title="From wallet"
+                    component={
+                      <SelectField
+                        name="walletId"
+                        control={control}
+                        options={walletOptions}
+                        placeholder="Choose wallet"
+                      />
+                    }
+                  />
+                  <div className="w-full bg-slate-100 p-2">
+                    <RadioGroupField name="type" control={control} />
+                  </div>
                   <FieldSection
                     title="Price"
                     component={
@@ -135,17 +153,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                       />
                     }
                   />
-                  <FieldSection
-                    title="From wallet"
-                    component={
-                      <SelectField
-                        name="walletId"
-                        control={control}
-                        options={walletOptions}
-                        placeholder="Choose wallet"
-                      />
-                    }
-                  />
+
                   <FieldSection
                     title="Date"
                     component={
@@ -178,17 +186,28 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                   </div>
                 </div>
               </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={handleClickCancel}
-                >
-                  Cancel
-                </Button>
-                <Button color="primary" type="submit">
-                  Save
-                </Button>
+              <ModalFooter className="flex justify-between">
+                <div>
+                  <Button
+                    color="danger"
+                    onPress={() => handleDeleteTransaction()}
+                  >
+                    Delete
+                  </Button>
+                </div>
+
+                <div>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={handleClickCancel}
+                  >
+                    Cancel
+                  </Button>
+                  <Button color="primary" type="submit">
+                    Save
+                  </Button>
+                </div>
               </ModalFooter>
             </form>
           </>

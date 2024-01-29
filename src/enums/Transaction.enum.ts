@@ -1,5 +1,5 @@
 export enum ETransactionType {
-  EXPENSED = "EXPENSED",
-  EARNING = "EARNING",
-  BORROWED_LENT = "BORROWED_LENT",
+  EXPENSED = "expensed",
+  EARNING = "earned",
+  BORROWED_LENT = "borrowed_lent",
 }

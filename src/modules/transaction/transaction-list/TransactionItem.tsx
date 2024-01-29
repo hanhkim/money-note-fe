@@ -1,6 +1,8 @@
 import FontIcon from "@/components/icon/FontIcon";
 import { FontIconType } from "@/components/icon/fontIconType";
+import { ETransactionType } from "@/enums/Transaction.enum";
 import { ITransaction } from "@/models/Transaction.model";
+import classNames from "classnames";
 import Image from "next/image";
 import React from "react";
 
@@ -23,7 +25,12 @@ const TransactionItem: React.FC<ITransactionItem> = ({ transaction }) => {
           <p className="text-xs">{transaction.note}</p>
         </div>
       </div>
-      <div className="text-[red]">{`-${transaction.amount}`}</div>
+      <div
+        className={classNames({
+          "text-[red]": transaction.type === ETransactionType.EXPENSED,
+          "text-[green]": transaction.type === ETransactionType.EARNING,
+        })}
+      >{`${transaction.amount}`}</div>
     </div>
   );
 };

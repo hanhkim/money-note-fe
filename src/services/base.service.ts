@@ -115,18 +115,19 @@ class BaseHttpService {
   }
 
   async post(endpoint: string, data = {}, options = {}): Promise<any> {
-    const fullUrl = this.getFullUrl(endpoint);
-    return this.instance.post(fullUrl, data, options);
+    // const fullUrl = this.getFullUrl(endpoint);
+    return this.instance.post(endpoint, data, options);
   }
 
   async put(endpoint: string, data = {}, options = {}): Promise<any> {
-    const fullUrl = this.getFullUrl(endpoint);
-    return this.instance.put(fullUrl, data, options);
+    // const fullUrl = this.getFullUrl(endpoint);
+    return this.instance.put(endpoint, data, options);
   }
 
   async delete(endpoint: string, options = {}): Promise<any> {
-    const fullUrl = this.getFullUrl(endpoint);
-    return this.instance.delete(fullUrl, options);
+    // const fullUrl = this.getFullUrl(endpoint);
+    console.log("endpoint :>> ", endpoint);
+    return this.instance.delete(endpoint, options);
   }
 
   async patch(endpoint: string, data = {}, options = {}): Promise<any> {

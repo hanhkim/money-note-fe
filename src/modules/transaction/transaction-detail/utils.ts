@@ -5,7 +5,7 @@ import transactionService from "@/services/transaction.service";
 import walletService from "@/services/wallet.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   ITransactionDetailStore,
   useTransactionDetailStore,
@@ -26,12 +26,16 @@ const initialData: ITransactionForm = {
 };
 
 export const useTransactionModal = (callback: () => void) => {
+  const selectedTransactionId = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.selectedTransactionId
+  );
   const detailTransaction = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.detailTransaction
   );
-  const { handleSubmit, control, reset, setValue } = useForm<ITransactionForm>({
-    defaultValues: initialData,
-  });
+  const { handleSubmit, control, reset, setValue, watch } =
+    useForm<ITransactionForm>({
+      defaultValues: initialData,
+    });
 
   const handleClose = () => {
     reset();
@@ -48,8 +52,9 @@ export const useTransactionModal = (callback: () => void) => {
 
   const { mutateAsync } = useAddTransaction(handleClose);
 
+  const { mutateAsync: handleDelete } = useDeleteTransaction(handleClose);
+
   const onSubmit = handleSubmit(async (data: ITransactionForm) => {
-    console.log("data >> ", data);
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
@@ -59,23 +64,29 @@ export const useTransactionModal = (callback: () => void) => {
         formData.append(key, value);
       }
     });
-    console.log("formData :>> ", formData.values());
 
     await mutateAsync(formData);
   });
+
+  const handleDeleteTransaction = async () => {
+    if (!selectedTransactionId) return;
+    await handleDelete(selectedTransactionId);
+  };
 
   return {
     onSubmit,
     control,
     reset,
     setValue,
+    watch,
+    handleDeleteTransaction,
   };
 };
 
-export const useGetCategoryList = () => {
+export const useGetCategoryList = (type: ETransactionType) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["getCategoryList"],
-    queryFn: () => categoryService.getCategories({ type: "expensed" }),
+    queryKey: ["getCategoryList", type],
+    queryFn: () => categoryService.getCategories({ type }),
     retry: 3,
     select: (result) => {
       return result?.map((r: any) => ({ ...r, value: r.id, label: r.name }));
@@ -134,4 +145,26 @@ export const useGetDetailTransaction = () => {
       return result;
     },
   });
+};
+
+export const useDeleteTransaction = (callback: () => void) => {
+  const queryClient = useQueryClient();
+  const selectedTransactionId = useTransactionDetailStore(
+    (state: ITransactionDetailStore) => state.selectedTransactionId
+  );
+
+  const { mutateAsync, data, isPending } = useMutation({
+    mutationKey: ["addTransaction", selectedTransactionId],
+    mutationFn: (id: string) => {
+      return transactionService.deleteTransaction(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["transactionService.getTransactions"],
+      });
+      callback?.();
+    },
+  });
+
+  return { mutateAsync, isPending };
 };

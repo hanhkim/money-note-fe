@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Card,
   CardBody,
@@ -20,8 +20,11 @@ import {
   useTransactionDetailStore,
   useTransactionListStore,
 } from "./transactionList.store";
-import { pick } from "lodash";
 import { useGetDetailTransaction } from "../transaction-detail/utils";
+import EmptyData from "@/components/empty-data/EmptyData";
+import { ETransactionType } from "@/enums/Transaction.enum";
+import classNames from "classnames";
+import { sum } from "lodash";
 
 dayjs.extend(updateLocale);
 
@@ -44,17 +47,34 @@ dayjs.updateLocale("en", {
 
 const TransactionList = () => {
   const { transactionsByDate = {} } = useGetTransactions();
+  const { month } = useTransactionListStore((state: ITransactionListStore) => ({
+    setMonth: state.setMonth,
+    month: state.month,
+  }));
+
+  const transactionData = useMemo(
+    () => Object.entries(transactionsByDate),
+    [transactionsByDate]
+  );
 
   return (
     <div className="">
       <div className="flex flex-col gap-4">
-        {Object.entries(transactionsByDate)?.map(([date, transactions]) => (
-          <TransactionBlock
-            transactions={transactions as ITransaction[]}
-            date={date}
-            key={date}
+        {transactionData?.length > 0 ? (
+          transactionData.map(([date, transactions]) => (
+            <TransactionBlock
+              transactions={transactions as ITransaction[]}
+              date={date}
+              key={date}
+            />
+          ))
+        ) : (
+          <EmptyData
+            text={`You have not had any transactions in ${dayjs()
+              .month(month)
+              .format("MMMM")}. Add transactions to track your expenses`}
           />
-        ))}
+        )}
       </div>
     </div>
   );
@@ -111,12 +131,22 @@ export const TransactionDateHeader: React.FC<{
   transactions: ITransaction[];
   date: string;
 }> = ({ transactions, date }) => {
-  const sumAmount = sumBy(transactions, "amount");
+  const sumAmount = transactions.reduce(
+    (sum: number, currentT: ITransaction) => {
+      if (currentT.type === ETransactionType.EARNING) {
+        return sum + Number(currentT.amount);
+      } else if (currentT.type === ETransactionType.EXPENSED) {
+        return sum - Number(currentT.amount);
+      }
+      return sum;
+    },
+    0
+  );
 
   return (
     <>
       <div className="flex gap-3 items-center">
-        <div className="text-xl text-slate-500">{dayjs(date).format("D")}</div>
+        <div className="text-3xl text-slate-500">{dayjs(date).format("D")}</div>
         <div>
           <div className="text-base">{dayjs(date).format("MMMM, YYYY")}</div>
           <div>
@@ -126,7 +156,14 @@ export const TransactionDateHeader: React.FC<{
           </div>
         </div>
       </div>
-      <div className="text-[red]">{sumAmount || "-"}</div>
+      <div
+        className={classNames({
+          "text-[red]": sumAmount < 0,
+          "text-[green]": sumAmount > 0,
+        })}
+      >
+        {sumAmount || "-"}
+      </div>
     </>
   );
 };

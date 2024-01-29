@@ -20,6 +20,10 @@ class TransactionService extends BaseHttpService {
   getTransaction = (id: string): Promise<ITransaction> => {
     return this.get(`${path}/${id}`);
   };
+
+  deleteTransaction = (id: string): Promise<any> => {
+    return this.delete(`${path}/${id}`);
+  };
 }
 
 const transactionService = new TransactionService();

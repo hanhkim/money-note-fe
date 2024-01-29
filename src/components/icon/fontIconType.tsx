@@ -963,4 +963,5 @@ export type FontIconType =
   | "local_taxi"
   | "local_parking"
   | "local_gas_station"
-  | "home_repair_service";
+  | "home_repair_service"
+  | "wallet";
