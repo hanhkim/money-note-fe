@@ -30,6 +30,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <title>Money note - quản lý tốt chi tiêu của bạn</title>
+      <meta name="theme-color" content="rgb(0, 112, 240)"></meta>
+      <meta name="full-screen" content="yes"></meta>
+      <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta
+        name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimal-ui"
+      />
       <body className={lexend.className}>
         {/* <QueryClientProvider client={queryClient}> */}
         {/* <HydrationBoundary state={pageProps.dehydratedState}> */}

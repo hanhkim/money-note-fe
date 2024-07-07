@@ -2,6 +2,8 @@ import FontIcon from "@/components/icon/FontIcon";
 import { IWallet } from "@/models/Wallet.model";
 import {
   Button,
+  Card,
+  CardBody,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -17,6 +19,7 @@ interface IWalletItemProps {
   wallet?: IWallet;
   onCreateWallet?: () => void;
   onDelete?: () => void;
+  onEditWallet?: () => void;
 }
 
 const WalletItem: React.FC<IWalletItemProps> = ({
@@ -24,6 +27,7 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   wallet,
   onCreateWallet,
   onDelete,
+  onEditWallet,
 }) => {
   const content = (
     <DropdownMenu
@@ -32,7 +36,9 @@ const WalletItem: React.FC<IWalletItemProps> = ({
       variant={"solid"}
     >
       <DropdownItem key="new">Điều chỉnh số dư</DropdownItem>
-      <DropdownItem key="edit">Chỉnh sửa ví</DropdownItem>
+      <DropdownItem key="edit" onClick={onEditWallet}>
+        Chỉnh sửa ví
+      </DropdownItem>
       <DropdownItem
         key="delete"
         className="text-danger"
@@ -46,32 +52,38 @@ const WalletItem: React.FC<IWalletItemProps> = ({
 
   const renderItem = () => {
     return (
-      <div className="flex flex-col justify-between w-full h-full">
-        <div className="flex justify-between items-center w-full">
-          <h3>{wallet?.name}</h3>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                startContent={<FontIcon type="more_vert" />}
-                variant="light"
-                isIconOnly
-              />
-            </DropdownTrigger>
-            {content}
-          </Dropdown>
-        </div>
-        <p className="text-3xl">{wallet?.amount || 0}đ</p>
-      </div>
+      <Card className="w-full">
+        <CardBody>
+          <div className="flex gap-4 items-center">
+            <FontIcon type={"wallet"} className="text-5xl" />
+            <div className="flex flex-col justify-between w-full h-full">
+              <div className="flex justify-between items-center w-full">
+                <h5>{wallet?.name}</h5>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button
+                      startContent={<FontIcon type="more_vert" />}
+                      variant="light"
+                      isIconOnly
+                    />
+                  </DropdownTrigger>
+                  {content}
+                </Dropdown>
+              </div>
+              <p className="text-xl">{wallet?.amount || 0}đ</p>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
     );
   };
 
   const renderCreateItem = () => {
     return (
       <Button
-        color="default"
+        color="success"
         startContent={<FontIcon type="add" />}
-        variant="light"
-        className="w-full h-full text-xl"
+        variant="bordered"
         onClick={onCreateWallet}
       >
         Tạo ví
@@ -80,7 +92,7 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   };
 
   return (
-    <div className="w-[300px] h-[150px] bg-cyan-500 rounded-2xl flex justify-center items-center hover:bg-cyan-600 p-6">
+    <div className="sm:w-[300px] w-full h-[100px] rounded-2xl flex justify-center items-center">
       {isCreating ? renderCreateItem() : renderItem()}
     </div>
   );

@@ -1,21 +1,23 @@
+"use client";
 import React from "react";
-import { Login } from "@/modules/login";
+import SignUpForm from "./SignUpForm";
 import Image from "next/image";
 
-const LoginPage = () => {
+const SignUp = () => {
   return (
     <div className="">
-      <div className="h-200px w-full text-center mt-20">
+      <div className="h-100px w-full text-center mt-10">
         <Image
           src="/images/background_login.png"
-          width={200}
-          height={200}
+          width={100}
+          height={100}
           alt="bg-login"
           className="mx-auto"
         />
       </div>
-      <Login />
+      <SignUpForm />
     </div>
   );
 };
-export default LoginPage;
+
+export default SignUp;

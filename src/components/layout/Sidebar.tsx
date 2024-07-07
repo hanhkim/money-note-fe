@@ -1,10 +1,23 @@
 "use client";
 import classNames from "classnames";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useMemo } from "react";
 import FontIcon from "../icon/FontIcon";
+import { Image } from "@nextui-org/image";
 import { FontIconType } from "../icon/fontIconType";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  User,
+} from "@nextui-org/react";
+import { useMutation } from "@tanstack/react-query";
+import authService from "@/services/auth.service";
 
 const menuItems = [
   { id: 1, label: "Transactions", icon: "paid", link: "/transactions" },
@@ -14,6 +27,21 @@ const menuItems = [
 const Sidebar = () => {
   const [toggleCollapse, setToggleCollapse] = useState(true);
   const [isCollapsible, setIsCollapsible] = useState(false);
+
+  const router = useRouter();
+
+  const { mutateAsync: logout, error } = useMutation({
+    mutationKey: ["authService.logout"],
+    mutationFn: () => authService.logout(),
+    onSuccess: async (result) => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      router.push("/login");
+    },
+    onError: (error) => {
+      alert(error);
+    },
+  });
 
   const pathname = usePathname();
 
@@ -54,6 +82,9 @@ const Sidebar = () => {
     setToggleCollapse(!toggleCollapse);
   };
 
+  const handleClickLogout = async () => {
+    await logout();
+  };
   return (
     <div
       className={wrapperClasses}
@@ -62,16 +93,31 @@ const Sidebar = () => {
       style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
     >
       <div className="flex flex-col">
-        <div className="flex items-center justify-between relative">
-          <div
-            className="flex items-center pl-1 cursor-pointer"
-            onClick={handleSidebarToggle}
-          >
-            <FontIcon type="menu" />
+        <div className="flex flex-col items-start">
+          <div className="w-full flex mb-2">
+            <Dropdown placement="right">
+              <DropdownTrigger>
+                <User
+                  as="button"
+                  name={toggleCollapse ? "" : "User name"}
+                  className="transition-transform"
+                  avatarProps={{
+                    src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                  }}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Static Actions">
+                <DropdownItem key="new">
+                  <p className="font-bold">User name</p>
+                  <p className="text-sm">zoey@example.com</p>
+                </DropdownItem>
+                <DropdownItem key="copy" onClick={handleClickLogout}>
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
-        </div>
 
-        <div className="flex flex-col items-start mt-10">
           {menuItems.map(({ icon, ...menu }, index) => {
             const classes = getNavItemClasses(menu);
             return (
@@ -95,6 +141,21 @@ const Sidebar = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className="flex items-center justify-between fixed bottom-10">
+          <div
+            className="flex items-center pl-1 cursor-pointer"
+            onClick={handleSidebarToggle}
+          >
+            <FontIcon
+              type={
+                toggleCollapse
+                  ? "keyboard_double_arrow_right"
+                  : "keyboard_double_arrow_left"
+              }
+            />
+          </div>
         </div>
       </div>
     </div>

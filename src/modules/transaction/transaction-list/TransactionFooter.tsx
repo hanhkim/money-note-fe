@@ -1,23 +1,26 @@
 "use client";
+// import { headers } from "next/headers";
+import { headers } from "next/headers";
 import React, { useState } from "react";
 import { Button } from "@nextui-org/react";
 import FontIcon from "@/components/icon/FontIcon";
 import { TransactionModal } from "../transaction-detail";
 
-const TransactionFooter = () => {
+const TransactionFooter = ({ isMobile }: { isMobile: boolean }) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
-      <div className=" p-4 rounded  shadow-lg w-full">
-        <div className="text-center">
+      <div className="fixed bottom-[64px] left-0 p-4 rounded w-full">
+        <div className="text-center ">
           <Button
             color="primary"
             className="rounded-full"
             startContent={<FontIcon type="add" />}
             onClick={() => setOpenModal(true)}
+            isIconOnly={isMobile}
           >
-            Add transaction
+            {isMobile ? "" : "Add transaction"}
           </Button>
         </div>
       </div>

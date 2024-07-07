@@ -1,6 +1,11 @@
+import { SignUp } from "@/modules/sign-up";
 import React from "react";
 
-const SignUp = () => {
-  return <div>SignUp</div>;
+const SignUpPage = () => {
+  return (
+    <div>
+      <SignUp />
+    </div>
+  );
 };
-export default SignUp;
+export default SignUpPage;

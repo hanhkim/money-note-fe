@@ -1,14 +1,30 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { Header } from ".";
+import Footerbar from "./Footerbar";
+import classNames from "classnames";
 
-const Layout = ({ children }: { children?: ReactNode }) => {
+const Layout = ({
+  children,
+  isMobile,
+}: {
+  children?: ReactNode;
+  isMobile?: boolean;
+}) => {
   return (
-    <div className="h-screen flex flex-row justify-start">
-      <Sidebar />
-      <div className="flex-1 text-white">
-        <Header />
-        <div className="h-[calc(100vh-65px)]">{children}</div>
+    <div className="h-screen flex flex-row justify-start bg-white">
+      {!isMobile && <Sidebar />}
+      <div className="flex-1">
+        {/* <Header /> */}
+        <div
+          className={classNames({
+            "h-[calc(100vh-65px)]": !isMobile,
+            "h-[calc(100%-57px)]": isMobile,
+          })}
+        >
+          {children}
+        </div>
+        {isMobile && <Footerbar />}
       </div>
     </div>
   );

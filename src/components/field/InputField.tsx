@@ -23,7 +23,17 @@ const InputField: React.FC<IInputField> = ({
       render={({
         field: { onBlur, onChange, value },
         fieldState: { invalid, error },
-      }) => <Input value={value} onChange={onChange} {...rest} />}
+      }) => {
+        return (
+          <Input
+            value={value}
+            onChange={onChange}
+            isInvalid={!!error}
+            errorMessage={error?.message}
+            {...rest}
+          />
+        );
+      }}
     />
   );
 };

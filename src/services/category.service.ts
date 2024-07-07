@@ -7,7 +7,7 @@ class CategoryService extends BaseHttpService {
     super();
   }
 
-  getCategories = async (params: any) => {
+  getCategories = async (params?: any) => {
     const result = await this.get(`${path}`, { params });
 
     return result;

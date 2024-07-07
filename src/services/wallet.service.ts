@@ -18,8 +18,18 @@ class WalletService extends BaseHttpService {
     return result;
   };
 
+  update = async (data: IWallet): Promise<IWallet> => {
+    const result = await this.put(`${path}/${data.id}`, data);
+    return result;
+  };
+
   deleteWallet = async (id: string): Promise<IWallet> => {
     const result = await this.delete(`${path}/${id}`);
+    return result;
+  };
+
+  setDefaultWallet = async (id: string): Promise<string> => {
+    const result = await this.post(`${path}/set-default/${id}`);
     return result;
   };
 }

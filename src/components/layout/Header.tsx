@@ -10,12 +10,12 @@ import {
 
 function Header() {
   return (
-    <Navbar className="bg-white justify-between" maxWidth="full">
+    <Navbar className="bg-primary justify-between" maxWidth="full">
       <NavbarBrand>
-        <div className="text-[red]">Hello, friend!</div>
+        <div>Hello, friend!</div>
       </NavbarBrand>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+        <NavbarItem>
           <Link href="/login">Login</Link>
         </NavbarItem>
         <NavbarItem>

@@ -8,6 +8,7 @@ import {
   ModalFooter,
   Button,
   ModalProps,
+  Divider,
 } from "@nextui-org/react";
 import InputField from "@/components/field/InputField";
 import FieldSection from "@/components/field-section/FieldSection";
@@ -24,6 +25,9 @@ import {
   useTransactionDetailStore,
 } from "../transaction-list/transactionList.store";
 import RadioGroupField from "@/components/field/RadioGroupField";
+import { isMobile } from "react-device-detect";
+import { useGetProfile } from "@/hooks/useGetProfile";
+import FontIcon from "@/components/icon/FontIcon";
 
 interface ITransactionModal {
   isOpen: boolean;
@@ -37,6 +41,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   onClose,
 }) => {
   const { wallets } = useGetWalletList();
+  const { data } = useGetProfile();
 
   const openTransactionModal = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.openTransactionModal
@@ -87,14 +92,40 @@ const TransactionModal: React.FC<ITransactionModal> = ({
       isOpen={isOpenModal}
       placement={placement}
       onClose={handleClickCancel}
-      size="2xl"
+      size={isMobile ? "full" : "2xl"}
+      // scrollBehavior="outside"
+      className="h-full"
+      isDismissable
+      hideCloseButton
     >
       <ModalContent>
         {(onClose) => (
           <>
             <form onSubmit={onSubmit}>
               <ModalHeader className="flex flex-col gap-1">
-                Transaction
+                <div className="grid grid-cols-6">
+                  <Button
+                    color="default"
+                    variant="light"
+                    onPress={handleClickCancel}
+                    className="justify-start p-0 col-span-1"
+                  >
+                    Cancel
+                  </Button>
+                  <div className="justify-center items-center text-primary col-span-4 text-center flex">
+                    Record
+                  </div>
+                  <div className="col-span-1">
+                    <Button
+                      color="success"
+                      type="submit"
+                      variant="light"
+                      // className="justify-start p-0"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-4">
@@ -109,7 +140,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                       />
                     }
                   />
-                  <div className="w-full bg-slate-100 p-2">
+                  <div className="w-full p-0">
                     <RadioGroupField name="type" control={control} />
                   </div>
                   <FieldSection
@@ -122,7 +153,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                         placeholder="0.00"
                         labelPlacement="outside"
                         size="lg"
-                        startContent={
+                        endContent={
                           <div className="pointer-events-none flex items-center">
                             <span className="text-default-400 text-small">
                               VND
@@ -173,42 +204,24 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     }
                   />
                   <div>
-                    {/* <InputField
-                      name="img"
-                      control={control}
-                      placeholder="Enter your img"
-                      fullWidth
-                      size="sm"
-                      type="file"
-                      onChange={handleChangeFile}
-                    /> */}
                     <input type="file" onChange={handleChangeFile} />
                   </div>
                 </div>
-              </ModalBody>
-              <ModalFooter className="flex justify-between">
-                <div>
+                <Divider />
+                <div className="mt-2">
                   <Button
                     color="danger"
                     onPress={() => handleDeleteTransaction()}
+                    variant="bordered"
+                    startContent={
+                      <FontIcon type="delete" className="text-base" />
+                    }
+                    size="sm"
                   >
                     Delete
                   </Button>
                 </div>
-
-                <div>
-                  <Button
-                    color="danger"
-                    variant="light"
-                    onPress={handleClickCancel}
-                  >
-                    Cancel
-                  </Button>
-                  <Button color="primary" type="submit">
-                    Save
-                  </Button>
-                </div>
-              </ModalFooter>
+              </ModalBody>
             </form>
           </>
         )}

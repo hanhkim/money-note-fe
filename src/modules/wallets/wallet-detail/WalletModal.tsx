@@ -14,19 +14,29 @@ import FieldSection from "@/components/field-section/FieldSection";
 import { FormProvider, useForm } from "react-hook-form";
 import FontIcon from "@/components/icon/FontIcon";
 import { useWalletModal } from "./utils";
+import { useMyProfile } from "@/hooks/useMyProfile";
+import { Toaster } from "react-hot-toast";
+import { IWallet } from "@/models/Wallet.model";
 
 interface IWalletModal {
   isOpen: boolean;
   placement: ModalProps["placement"];
   onClose?: () => void;
+  selectedWallet: IWallet | null;
 }
 
 const WalletModal: React.FC<IWalletModal> = ({
   isOpen,
   placement,
   onClose,
+  selectedWallet,
 }) => {
-  const { methods, onSubmit } = useWalletModal(onClose);
+  const { defaultWallet: myDefaultWallet } = useMyProfile() || {};
+  const { methods, onSubmit } = useWalletModal(
+    onClose,
+    myDefaultWallet,
+    selectedWallet
+  );
   const { control } = methods;
 
   return (
@@ -36,7 +46,9 @@ const WalletModal: React.FC<IWalletModal> = ({
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
               <ModalHeader className="flex flex-col gap-1">
-                Create/Edit Wallet
+                {myDefaultWallet
+                  ? "Create/Edit Wallet"
+                  : "Create your first wallet"}
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-4">
@@ -106,6 +118,7 @@ const WalletModal: React.FC<IWalletModal> = ({
                   Save
                 </Button>
               </ModalFooter>
+              <Toaster />
             </form>
           </FormProvider>
         )}

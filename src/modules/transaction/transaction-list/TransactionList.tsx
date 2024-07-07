@@ -59,7 +59,7 @@ const TransactionList = () => {
 
   return (
     <div className="">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 p-2">
         {transactionData?.length > 0 ? (
           transactionData.map(([date, transactions]) => (
             <TransactionBlock
@@ -72,7 +72,7 @@ const TransactionList = () => {
           <EmptyData
             text={`You have not had any transactions in ${dayjs()
               .month(month)
-              .format("MMMM")}. Add transactions to track your expenses`}
+              .format("MMMM")}.\n Add transactions to track your expenses`}
           />
         )}
       </div>
@@ -106,12 +106,12 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
   };
 
   return (
-    <Card className="p-4">
-      <CardHeader className="flex justify-between">
+    <Card className="p-2">
+      <CardHeader className="flex justify-between px-0 py-2">
         <TransactionDateHeader transactions={transactions} date={date} />
       </CardHeader>
       <Divider />
-      <CardBody className="flex flex-col gap-4">
+      <CardBody className="flex flex-col gap-4 p-2 px-0 py-0">
         <Listbox color="default" variant="faded">
           {transactions?.map((transaction: ITransaction) => (
             <ListboxItem
