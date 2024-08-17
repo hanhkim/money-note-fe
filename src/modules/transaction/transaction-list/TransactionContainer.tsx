@@ -4,7 +4,7 @@ import TransactionFooter from "./TransactionFooter";
 
 const TransactionContainer = ({ isMobile }: { isMobile: boolean }) => {
   return (
-    <div className="p-4 h-full">
+    <div className="h-full">
       <TransactionTab />
       <TransactionFooter isMobile={isMobile} />
     </div>

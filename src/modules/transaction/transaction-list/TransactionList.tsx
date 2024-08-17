@@ -106,7 +106,7 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
   };
 
   return (
-    <Card className="p-2">
+    <Card className="p-2 border-none" isFooterBlurred shadow="sm" radius="sm">
       <CardHeader className="flex justify-between px-0 py-2">
         <TransactionDateHeader transactions={transactions} date={date} />
       </CardHeader>

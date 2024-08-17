@@ -63,6 +63,11 @@ const Account = () => {
           </div>
         ))}
       </div>
+      <Divider />
+      <div className="flex justify-between py-2">
+        <div className="text-neutral-500">Theme</div>
+        <div className="text-neutral-700 italic">Dark/Light</div>
+      </div>
 
       <div className="py-4">
         <Button

@@ -7,4 +7,5 @@ export interface IWallet {
   imgUrl?: string;
   description?: string;
   currencyUnit?: string;
+  isDefault: boolean;
 }

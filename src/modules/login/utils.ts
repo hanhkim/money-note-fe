@@ -17,7 +17,7 @@ export const useLogin = () => {
       localStorage.setItem("refreshToken", result?.refreshToken);
       const myProfile = await getProfile();
       console.log("myProfile :>> ", myProfile);
-      if (myProfile.defaultWalletId) {
+      if (myProfile.defaultWallet) {
         return router.push("/transactions");
       }
       return router.push("/wallets");

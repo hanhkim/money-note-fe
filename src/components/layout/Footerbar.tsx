@@ -2,7 +2,7 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import FontIcon from "../icon/FontIcon";
 import { FontIconType } from "../icon/fontIconType";
 import { useRouter } from "next/router";
@@ -27,8 +27,6 @@ const menuItems = [
 const Footerbar = () => {
   const [toggleCollapse, setToggleCollapse] = useState(true);
   const [isCollapsible, setIsCollapsible] = useState(false);
-  const [active, setActive] = useState(1);
-  // const router = useRouter();
 
   const pathname = usePathname();
 
@@ -54,11 +52,6 @@ const Footerbar = () => {
     setIsCollapsible(!isCollapsible);
   };
 
-  const handleChange = (menu: any, index: number) => {
-    // router.push(menu.link);
-    setActive(index);
-  };
-
   return (
     <div
       className={wrapperClasses}
@@ -68,13 +61,15 @@ const Footerbar = () => {
       {menuItems.map(({ icon, ...menu }, index) => {
         return (
           <div key={index}>
-            <Link href={menu.link}>
+            <Link
+              href={menu.link}
+              className={classNames({ "text-[red]": true })}
+            >
               <div
                 className={classNames(
                   "flex flex-col items-center p-1 text-slate-500",
-                  { "!text-primary": index === active }
+                  { "!text-primary": menu.id === activeMenu?.id }
                 )}
-                onClick={() => handleChange(menu, index)}
               >
                 <div>
                   <FontIcon type={icon as FontIconType} className="text-2xl" />

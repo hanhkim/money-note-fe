@@ -11,7 +11,7 @@ const TransactionFooter = ({ isMobile }: { isMobile: boolean }) => {
 
   return (
     <>
-      <div className="fixed bottom-[64px] left-0 p-4 rounded w-full">
+      <div className=" left-0 p-4 rounded w-full">
         <div className="text-center ">
           <Button
             color="primary"

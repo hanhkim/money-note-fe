@@ -12,7 +12,7 @@ const Layout = ({
   isMobile?: boolean;
 }) => {
   return (
-    <div className="h-screen flex flex-row justify-start bg-white">
+    <div className="h-screen flex flex-row justify-start">
       {!isMobile && <Sidebar />}
       <div className="flex-1">
         {/* <Header /> */}

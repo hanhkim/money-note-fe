@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const LoginPage = () => {
   return (
-    <div className="">
+    <div className="bg-white">
       <div className="h-200px w-full text-center mt-20">
         <Image
           src="/images/background_login.png"

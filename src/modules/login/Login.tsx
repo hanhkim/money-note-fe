@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 
 const Login = () => {
   return (
-    <div className="">
+    <div className="bg-white">
       <LoginForm />
     </div>
   );

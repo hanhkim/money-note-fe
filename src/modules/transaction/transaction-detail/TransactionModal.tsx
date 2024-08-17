@@ -102,7 +102,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
         {(onClose) => (
           <>
             <form onSubmit={onSubmit}>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-col gap-1 border-b-1 border-[#dedede]">
                 <div className="grid grid-cols-6">
                   <Button
                     color="default"
