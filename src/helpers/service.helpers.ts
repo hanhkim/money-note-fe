@@ -1,5 +1,4 @@
 import { UNAUTHORIZED } from "@/constants/statusCode.constants";
-import { getRefreshTokenService } from "@/services/auth.service";
 import { AxiosInstance } from "axios";
 
 export const getAccessToken = () => {

@@ -25,7 +25,7 @@ const LoginForm = () => {
     <div className="w-80 mx-auto py-10">
       <p className="text-xl mb-6 mt-10 text-center font-bold">Login</p>
       <p className="text-sm text-center text-gray-500 mb-10">
-        Hello friend! Welcome back you've been missed!
+        Hello friend! Welcome back you&apos;ve been missed!
       </p>
       <FormProvider {...methods}>
         <form className="flex gap-10 flex-col ">

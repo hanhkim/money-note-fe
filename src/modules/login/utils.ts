@@ -23,7 +23,7 @@ export const useLogin = () => {
       return router.push("/wallets");
     },
     onError: (error) => {
-      alert(error);
+      console.log("error :>> ", error);
     },
   });
 

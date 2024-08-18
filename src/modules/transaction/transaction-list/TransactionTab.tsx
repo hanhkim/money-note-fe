@@ -29,7 +29,6 @@ const TransactionTab = () => {
   );
 
   const getNextMonth = () => {
-    console.log("month, year :>> ", month, year);
     if (month === 11) {
       setYear(year + 1);
     }
