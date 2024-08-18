@@ -14,6 +14,7 @@ import { shallow } from "zustand/shallow";
 import { get } from "lodash";
 import { useEffect, useMemo } from "react";
 import { useGetProfile } from "@/hooks/useGetProfile";
+import { useMyProfile } from "@/hooks/useMyProfile";
 
 const initialData: ITransactionForm = {
   amount: 0,
@@ -27,7 +28,7 @@ const initialData: ITransactionForm = {
 };
 
 export const useTransactionModal = (callback: () => void) => {
-  const { data } = useGetProfile();
+  const data = useMyProfile();
   const { defaultWallet } = data || {};
   const selectedTransactionId = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.selectedTransactionId
@@ -37,7 +38,7 @@ export const useTransactionModal = (callback: () => void) => {
   );
 
   const defaultValues = useMemo(() => {
-    return { ...initialData, walletId: defaultWallet };
+    return { ...initialData, walletId: defaultWallet?.id };
   }, [defaultWallet]);
 
   const { handleSubmit, control, reset, setValue, watch } =

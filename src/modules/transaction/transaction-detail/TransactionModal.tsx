@@ -41,7 +41,6 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   onClose,
 }) => {
   const { wallets } = useGetWalletList();
-  const { data } = useGetProfile();
 
   const openTransactionModal = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.openTransactionModal

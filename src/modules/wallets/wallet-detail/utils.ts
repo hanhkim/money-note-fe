@@ -12,6 +12,7 @@ const initialData: IWallet = {
   description: "",
   imgUrl: undefined,
   currencyUnit: "VND",
+  isDefault: false,
 };
 
 export const useWalletModal = (
