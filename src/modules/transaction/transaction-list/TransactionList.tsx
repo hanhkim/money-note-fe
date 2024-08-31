@@ -25,6 +25,8 @@ import EmptyData from "@/components/empty-data/EmptyData";
 import { ETransactionType } from "@/enums/Transaction.enum";
 import classNames from "classnames";
 import { sum } from "lodash";
+import { convertNumberToCurrency } from "@/helpers/common.helpers";
+import AmountLabel from "@/components/amount-label/AmountLabel";
 
 dayjs.extend(updateLocale);
 
@@ -107,7 +109,7 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
 
   return (
     <Card className="p-2 border-none" isFooterBlurred shadow="sm" radius="sm">
-      <CardHeader className="flex justify-between px-0 py-2">
+      <CardHeader className="flex justify-between px-3 py-2">
         <TransactionDateHeader transactions={transactions} date={date} />
       </CardHeader>
       <Divider />
@@ -156,14 +158,7 @@ export const TransactionDateHeader: React.FC<{
           </div>
         </div>
       </div>
-      <div
-        className={classNames({
-          "text-[red]": sumAmount < 0,
-          "text-[green]": sumAmount > 0,
-        })}
-      >
-        {sumAmount || "-"}
-      </div>
+      <AmountLabel value={sumAmount} />
     </>
   );
 };

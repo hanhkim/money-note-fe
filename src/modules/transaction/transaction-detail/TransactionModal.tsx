@@ -22,7 +22,9 @@ import {
 } from "./utils";
 import {
   ITransactionDetailStore,
+  ITransactionListStore,
   useTransactionDetailStore,
+  useTransactionListStore,
 } from "../transaction-list/transactionList.store";
 import RadioGroupField from "@/components/field/RadioGroupField";
 import { isMobile } from "react-device-detect";
@@ -206,12 +208,12 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     <input type="file" onChange={handleChangeFile} />
                   </div>
                 </div>
-                <Divider />
-                <div className="mt-2">
+                <Divider className="mt-4" />
+                <div className="mt-2 text-right">
                   <Button
                     color="danger"
                     onPress={() => handleDeleteTransaction()}
-                    variant="bordered"
+                    variant="light"
                     startContent={
                       <FontIcon type="delete" className="text-base" />
                     }

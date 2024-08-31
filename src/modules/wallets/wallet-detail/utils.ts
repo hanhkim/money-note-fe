@@ -13,6 +13,10 @@ const initialData: IWallet = {
   imgUrl: undefined,
   currencyUnit: "VND",
   isDefault: false,
+  totalExpense: 0,
+  totalIncome: 0,
+  transferAmount: 0,
+  receiveAmount: 0,
 };
 
 export const useWalletModal = (
@@ -110,16 +114,17 @@ export const useDeleteWallet = () => {
 };
 
 export const useSetDefaultWallet = () => {
+  const queryClient = useQueryClient();
   const { getProfile } = useGetProfile();
 
   return useMutation({
     mutationKey: ["walletService.setDefaultWallet"],
     mutationFn: (id: string) => walletService.setDefaultWallet(id),
     onSuccess: async (result) => {
-      console.log("result :>> ", result);
-      // set Default wallet
-
       await getProfile();
+      queryClient.invalidateQueries({
+        queryKey: ["walletService.getWallets"],
+      });
     },
   });
 };

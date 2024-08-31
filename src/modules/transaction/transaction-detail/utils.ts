@@ -8,7 +8,9 @@ import dayjs from "dayjs";
 import { useForm, useWatch } from "react-hook-form";
 import {
   ITransactionDetailStore,
+  ITransactionListStore,
   useTransactionDetailStore,
+  useTransactionListStore,
 } from "../transaction-list/transactionList.store";
 import { shallow } from "zustand/shallow";
 import { get } from "lodash";
@@ -36,19 +38,34 @@ export const useTransactionModal = (callback: () => void) => {
   const detailTransaction = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.detailTransaction
   );
+  const { selectedWalletId } = useTransactionListStore(
+    (state: ITransactionListStore) => ({
+      selectedWalletId: state.selectedWalletId,
+    })
+  );
 
   const defaultValues = useMemo(() => {
-    return { ...initialData, walletId: defaultWallet?.id };
-  }, [defaultWallet]);
+    return {
+      ...initialData,
+      walletId: selectedWalletId || defaultWallet?.id,
+    };
+  }, [defaultWallet?.id, selectedWalletId]);
 
   const { handleSubmit, control, reset, setValue, watch } =
     useForm<ITransactionForm>({
       defaultValues,
     });
 
+  const walletId = watch("walletId");
+
+  const queryClient = useQueryClient();
+
   const handleClose = () => {
     reset();
     callback?.();
+    queryClient.invalidateQueries({
+      queryKey: ["walletService.getWallet", walletId],
+    });
   };
 
   useEffect(() => {
@@ -115,6 +132,9 @@ export const useAddTransaction = (callback: () => void) => {
       queryClient.invalidateQueries({
         queryKey: ["transactionService.getTransactions"],
       });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["walletService.getWallets"],
+      // });
       callback?.();
     },
   });
@@ -134,6 +154,20 @@ export const useGetWalletList = () => {
   });
 
   return { wallets: data, isLoading };
+};
+
+export const useGetDetailWallet = (id: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["walletService.getWallet", id],
+    queryFn: () => walletService.getWallet(id),
+    retry: 3,
+    enabled: !!id,
+    // initialData: {},
+  });
+
+  const walletDefailt = useMemo(() => data, [data]);
+
+  return { data: walletDefailt, isLoading };
 };
 
 export const useGetDetailTransaction = () => {

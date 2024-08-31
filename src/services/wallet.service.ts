@@ -13,6 +13,11 @@ class WalletService extends BaseHttpService {
     return result;
   };
 
+  getWallet = async (id: string): Promise<IWallet> => {
+    const result = await this.get(`${path}/${id}`);
+    return result;
+  };
+
   create = async (data: IWallet): Promise<IWallet> => {
     const result = await this.post(`${path}`, data);
     return result;

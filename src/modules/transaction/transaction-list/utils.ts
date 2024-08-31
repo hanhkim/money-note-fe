@@ -7,16 +7,23 @@ import {
   useTransactionListStore,
 } from "./transactionList.store";
 import dayjs from "dayjs";
+import { select } from "@nextui-org/theme";
 
 export const useGetTransactions = () => {
-  const month = useTransactionListStore(
-    (state: ITransactionListStore) => state.month
+  const { month, selectedWalletId } = useTransactionListStore(
+    (state: ITransactionListStore) => ({
+      month: state.month,
+      selectedWalletId: state.selectedWalletId,
+    })
   );
 
   const { data, isLoading } = useQuery({
-    queryKey: ["transactionService.getTransactions", month],
+    queryKey: ["transactionService.getTransactions", month, selectedWalletId],
     queryFn: () =>
-      transactionService.getTransactions(month + 1 || dayjs().month()),
+      transactionService.getTransactions({
+        month: month + 1 || dayjs().month(),
+        walletId: selectedWalletId as string | undefined,
+      }),
     select: (result) => {
       return groupBy(result, "date");
     },

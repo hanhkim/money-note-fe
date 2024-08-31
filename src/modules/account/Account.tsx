@@ -46,9 +46,6 @@ const Account = () => {
         as="button"
         name={`${myProfile?.firstName} ${myProfile?.lastName}`}
         className="transition-transform"
-        avatarProps={{
-          src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-        }}
         classNames={{
           name: "text-neutral-700 font-bold capitalize",
         }}

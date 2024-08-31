@@ -1,16 +1,23 @@
 import { ITransaction } from "@/models/Transaction.model";
+import { IWallet } from "@/models/Wallet.model";
 import dayjs from "dayjs";
 import { create } from "zustand";
 
 export interface ITransactionListStore {
   month: number;
+  selectedWalletId: string | null;
   setMonth: (m: number) => void;
+  setSelectedWalletId: (wallet: string | null) => void;
 }
 
 const useTransactionListStore = create<ITransactionListStore>((set) => ({
+  selectedWalletId: null,
   month: dayjs().month(),
   setMonth: (m: number) => {
     set({ month: m });
+  },
+  setSelectedWalletId: (walletId: string | null) => {
+    set({ selectedWalletId: walletId });
   },
 }));
 

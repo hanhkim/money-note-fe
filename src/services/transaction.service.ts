@@ -3,13 +3,17 @@ import BaseHttpService from "./base.service";
 
 const path = "transactions";
 
+interface ITransactionsRequest {
+  month?: number;
+  walletId?: string;
+}
+
 class TransactionService extends BaseHttpService {
   constructor() {
     super();
   }
 
-  getTransactions = (month: number) => {
-    const params = { month };
+  getTransactions = (params: ITransactionsRequest) => {
     return this.get(path, { params });
   };
 

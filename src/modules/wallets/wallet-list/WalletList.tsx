@@ -4,7 +4,7 @@ import WalletItem from "./WalletItem";
 import { useGetWalletList } from "@/modules/transaction/transaction-detail/utils";
 import { IWallet } from "@/models/Wallet.model";
 import WalletModal from "../wallet-detail/WalletModal";
-import { useDeleteWallet } from "../wallet-detail/utils";
+import { useDeleteWallet, useSetDefaultWallet } from "../wallet-detail/utils";
 import { useMyProfile } from "@/hooks/useMyProfile";
 
 const WalletList = () => {
@@ -18,6 +18,8 @@ const WalletList = () => {
 
   const { handleDeleteWallet } = useDeleteWallet();
 
+  const { mutateAsync: setDefaultWallet } = useSetDefaultWallet();
+
   const myProfile = useMyProfile();
 
   useEffect(() => {
@@ -28,6 +30,10 @@ const WalletList = () => {
   const handleEditWallet = (wallet: IWallet) => {
     setSelectedWallet(wallet);
     setIsCreateWallet(true);
+  };
+
+  const handleSetDefaultWallet = async (wallet: IWallet) => {
+    await setDefaultWallet(wallet.id as string);
   };
 
   return (
@@ -45,6 +51,7 @@ const WalletList = () => {
               onEditWallet={() => {
                 handleEditWallet(wallet);
               }}
+              onSetDefault={() => handleSetDefaultWallet(wallet)}
             />
           ))}
 

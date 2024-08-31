@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Divider,
@@ -15,16 +15,22 @@ import {
 import FontIcon from "@/components/icon/FontIcon";
 import dayjs from "dayjs";
 import TransactionSummary from "./TransactionSummary";
-import { useGetWalletList } from "../transaction-detail/utils";
+import {
+  useGetDetailWallet,
+  useGetWalletList,
+} from "../transaction-detail/utils";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { IWallet } from "@/models/Wallet.model";
 
 const TransactionTab = () => {
   const [year, setYear] = useState(dayjs().year());
 
-  const { setMonth, month } = useTransactionListStore(
+  const { setMonth, month, setSelectedWalletId } = useTransactionListStore(
     (state: ITransactionListStore) => ({
       setMonth: state.setMonth,
       month: state.month,
+      setSelectedWalletId: state.setSelectedWalletId,
+      selectedWallet: state.selectedWalletId,
     })
   );
 
@@ -57,7 +63,16 @@ const TransactionTab = () => {
 
   const { defaultWallet } = useMyProfile() || {};
 
-  console.log("defaultWallet :>> ", defaultWallet);
+  const handleChangeWallet = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const walletId = e?.target?.value;
+    setSelectedWalletId(walletId);
+  };
+
+  useEffect(() => {
+    if (defaultWallet) {
+      setSelectedWalletId(defaultWallet?.id as string);
+    }
+  }, []);
 
   return (
     <div className="flex w-full flex-col h-[calc(100%-64px)] overflow-auto">
@@ -71,6 +86,8 @@ const TransactionTab = () => {
               label=""
               size="sm"
               defaultSelectedKeys={[defaultWallet?.id as string]}
+              onChange={handleChangeWallet}
+              disallowEmptySelection
             >
               {wallets.map((option) => (
                 <SelectItem key={option.id as string} value={option.id}>

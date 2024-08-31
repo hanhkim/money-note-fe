@@ -12,6 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/react";
+import classNames from "classnames";
 import React from "react";
 
 interface IWalletItemProps {
@@ -20,6 +21,7 @@ interface IWalletItemProps {
   onCreateWallet?: () => void;
   onDelete?: () => void;
   onEditWallet?: () => void;
+  onSetDefault?: () => void;
 }
 
 const WalletItem: React.FC<IWalletItemProps> = ({
@@ -28,17 +30,27 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   onCreateWallet,
   onDelete,
   onEditWallet,
+  onSetDefault,
 }) => {
+  const isDefaultWallet = wallet?.isDefault;
+  console.log("isDefaultWallet :>> ", isDefaultWallet);
+
   const content = (
     <DropdownMenu
       aria-label="Dropdown Variants"
       color={"primary"}
       variant={"solid"}
+      disabledKeys={
+        isDefaultWallet ? ["set-default", "transfer", "delete"] : []
+      }
     >
-      <DropdownItem key="new">Điều chỉnh số dư</DropdownItem>
       <DropdownItem key="edit" onClick={onEditWallet}>
         Chỉnh sửa ví
       </DropdownItem>
+      <DropdownItem key="set-default" onClick={onSetDefault}>
+        Làm mặc định
+      </DropdownItem>
+      <DropdownItem key="transfer">Chuyển sang ví khác</DropdownItem>
       <DropdownItem
         key="delete"
         className="text-danger"
@@ -52,7 +64,12 @@ const WalletItem: React.FC<IWalletItemProps> = ({
 
   const renderItem = () => {
     return (
-      <Card className="w-full">
+      <Card
+        className={classNames("w-full", {
+          "bg-[#f0f8ff]": isDefaultWallet,
+          "bg-[#f0f8ff] border border-primary": isDefaultWallet,
+        })}
+      >
         <CardBody>
           <div className="flex gap-4 items-center">
             <FontIcon type={"wallet"} className="text-5xl" />
