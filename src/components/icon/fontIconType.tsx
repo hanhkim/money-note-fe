@@ -965,4 +965,13 @@ export type FontIconType =
   | "local_gas_station"
   | "home_repair_service"
   | "wallet"
-  | "analytics";
+  | "analytics"
+  | "paid"
+  | "currency_exchange"
+  | "crowdsource"
+  | "wrist"
+  | "real_estate_agent"
+  | "expand"
+  | "request_quote"
+  | "finance_chip"
+  | "redeem";

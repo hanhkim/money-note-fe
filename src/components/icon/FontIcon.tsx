@@ -4,7 +4,7 @@ import { FontIconType } from "./fontIconType";
 
 const FontIcon: FC<FontIconProps> = React.forwardRef(
   ({ type, className = "", onClick }, ref) => (
-    <span
+    <div
       className={classnames(
         "material-icons-outlined material-symbols-outlined",
         className
@@ -12,7 +12,7 @@ const FontIcon: FC<FontIconProps> = React.forwardRef(
       onClick={onClick}
     >
       {type}
-    </span>
+    </div>
   )
 );
 

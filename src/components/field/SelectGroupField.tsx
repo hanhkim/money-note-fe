@@ -16,7 +16,7 @@ export interface ISelectOption {
   value: string | number;
 }
 
-const SelectField: React.FC<ISelectField> = ({
+const SelectGroupField: React.FC<ISelectField> = ({
   name,
   control,
   rules,
@@ -24,8 +24,6 @@ const SelectField: React.FC<ISelectField> = ({
   placeholder,
   label,
 }) => {
-  const [values, setValues] = React.useState(new Set([]));
-
   return (
     <Controller
       name={name}
@@ -52,11 +50,15 @@ const SelectField: React.FC<ISelectField> = ({
             isInvalid={!!error}
             errorMessage={error?.message}
           >
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
+            {(option) => {
+              console.log('option nha :>> ', option);
+
+              return (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              );
+            }}
           </Select>
         );
       }}
@@ -64,4 +66,4 @@ const SelectField: React.FC<ISelectField> = ({
   );
 };
 
-export default SelectField;
+export default SelectGroupField;

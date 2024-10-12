@@ -1,7 +1,7 @@
-import { ITransaction } from "@/models/Transaction.model";
-import BaseHttpService from "./base.service";
+import { ITransaction } from '@/models/Transaction.model';
+import BaseHttpService from './base.service';
 
-const path = "transactions";
+const path = 'transactions';
 
 interface ITransactionsRequest {
   month?: number;
@@ -17,8 +17,18 @@ class TransactionService extends BaseHttpService {
     return this.get(path, { params });
   };
 
-  addTransaction = (data: ITransaction) => {
+  addTransaction = (data: any) => {
     return this.post(path, data);
+  };
+
+  editTransaction = (data: any) => {
+    console.log('data.get() :>> ', data.entries());
+
+    for (let [key, value] of data.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    return this.put(`${path}/${data.get('id')}`, data);
   };
 
   getTransaction = (id: string): Promise<ITransaction> => {

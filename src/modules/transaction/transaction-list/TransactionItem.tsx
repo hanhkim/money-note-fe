@@ -17,10 +17,12 @@ const TransactionItem: React.FC<ITransactionItem> = ({ transaction }) => {
     <div className="flex justify-between items-center">
       <div className="flex gap-3 items-center">
         {transaction.category?.icon && (
-          <FontIcon
-            type={transaction.category.icon as FontIconType}
-            className="text-sky-300 w-[50px] h-[50px] text-[46px]"
-          />
+          <div className="bg-slate-500 rounded-full w-9 h-9 p-1 text-center">
+            <FontIcon
+              type={transaction.category.icon as FontIconType}
+              className="text-white pt-[2px]"
+            />
+          </div>
         )}
         <div>
           <p className="text-lg">{transaction.category.name}</p>

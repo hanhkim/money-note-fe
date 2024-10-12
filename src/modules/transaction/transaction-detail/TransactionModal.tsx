@@ -1,5 +1,5 @@
-"use client";
-import React, { useMemo } from "react";
+'use client';
+import React, { useMemo } from 'react';
 import {
   Modal,
   ModalContent,
@@ -9,31 +9,33 @@ import {
   Button,
   ModalProps,
   Divider,
-} from "@nextui-org/react";
-import InputField from "@/components/field/InputField";
-import FieldSection from "@/components/field-section/FieldSection";
-import SelectField from "@/components/field/SelectField";
-import TextareaField from "@/components/field/TextareaField";
-import DatePickerField from "@/components/field/DatePickerField";
+} from '@nextui-org/react';
+import InputField from '@/components/field/InputField';
+import FieldSection from '@/components/field-section/FieldSection';
+import SelectField from '@/components/field/SelectField';
+import TextareaField from '@/components/field/TextareaField';
+import DatePickerField from '@/components/field/DatePickerField';
 import {
   useGetCategoryList,
   useGetWalletList,
   useTransactionModal,
-} from "./utils";
+} from './utils';
 import {
   ITransactionDetailStore,
   ITransactionListStore,
   useTransactionDetailStore,
   useTransactionListStore,
-} from "../transaction-list/transactionList.store";
-import RadioGroupField from "@/components/field/RadioGroupField";
-import { isMobile } from "react-device-detect";
-import { useGetProfile } from "@/hooks/useGetProfile";
-import FontIcon from "@/components/icon/FontIcon";
+} from '../transaction-list/transactionList.store';
+import RadioGroupField from '@/components/field/RadioGroupField';
+import { isMobile } from 'react-device-detect';
+import { useGetProfile } from '@/hooks/useGetProfile';
+import FontIcon from '@/components/icon/FontIcon';
+import SelectGroupField from '@/components/field/SelectGroupField';
+import CategoryModal from '@/components/category-modal/CategoryModal';
 
 interface ITransactionModal {
   isOpen: boolean;
-  placement: ModalProps["placement"];
+  placement: ModalProps['placement'];
   onClose?: () => void;
 }
 
@@ -67,7 +69,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   const { onSubmit, control, reset, setValue, watch, handleDeleteTransaction } =
     useTransactionModal(handleClose);
 
-  const type = watch("type");
+  const type = watch('type');
 
   const { categories } = useGetCategoryList(type);
 
@@ -80,11 +82,11 @@ const TransactionModal: React.FC<ITransactionModal> = ({
 
   const handleChangeFile = (event: any) => {
     if (event.target.files && event.target.files[0]) {
-      console.log("event.target :>> ", event.target.files);
+      console.log('event.target :>> ', event.target.files);
       const i = event.target.files[0];
-      setValue("img", i);
+      setValue('img', i);
     } else {
-      setValue("img", null);
+      setValue('img', null);
     }
   };
 
@@ -93,7 +95,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
       isOpen={isOpenModal}
       placement={placement}
       onClose={handleClickCancel}
-      size={isMobile ? "full" : "2xl"}
+      size={isMobile ? 'full' : '2xl'}
       // scrollBehavior="outside"
       className="h-full"
       isDismissable
@@ -164,15 +166,24 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                       />
                     }
                   />
-                  <FieldSection
+                  {/* <FieldSection
                     title="Category"
                     component={
-                      <SelectField
+                      <SelectGroupField
                         name="categoryId"
                         control={control}
                         options={categories}
                       />
                     }
+                  /> */}
+
+                  <CategoryModal
+                    isOpen={true}
+                    onClose={() => {}}
+                    onSelectCategory={(category) => {
+                      setValue('categoryId', category.id);
+                    }}
+                    control={control}
                   />
                   <FieldSection
                     title="Notes"
