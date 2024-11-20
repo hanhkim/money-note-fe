@@ -9,6 +9,7 @@ export interface ISelectField {
   options: ISelectOption[];
   placeholder?: string;
   label?: string;
+  disabledKeys?: Array<any>;
 }
 
 export interface ISelectOption {
@@ -23,6 +24,7 @@ const SelectField: React.FC<ISelectField> = ({
   options = [],
   placeholder,
   label,
+  disabledKeys,
 }) => {
   const [values, setValues] = React.useState(new Set([]));
 
@@ -31,26 +33,24 @@ const SelectField: React.FC<ISelectField> = ({
       name={name}
       control={control}
       rules={rules}
-      render={({
-        field: { onBlur, onChange, value },
-        fieldState: { invalid, error },
-      }) => {
-        const selectedKeys = value
-          ? Array.isArray(value)
-            ? value
-            : [value.toString()]
-          : [];
+      render={({ field: { onBlur, onChange, value }, fieldState: { invalid, error } }) => {
+        const selectedKeys = value ? (Array.isArray(value) ? value : [value]) : [];
 
         return (
           <Select
             placeholder={placeholder}
             className="w-full"
+            classNames={{
+              mainWrapper: 'h-12',
+            }}
             onChange={onChange}
             defaultSelectedKeys={selectedKeys}
             items={options}
             label={label}
             isInvalid={!!error}
             errorMessage={error?.message}
+            size="sm"
+            disabledKeys={disabledKeys}
           >
             {options.map((option) => (
               <SelectItem key={option.value} value={option.value}>

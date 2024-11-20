@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import Title from '../typography/Title';
 
 export interface IFieldSection {
   title: string;
@@ -8,7 +9,7 @@ export interface IFieldSection {
 const FieldSection: React.FC<IFieldSection> = ({ title, component }) => {
   return (
     <div>
-      <p>{title}</p>
+      <Title>{title}</Title>
       {component}
     </div>
   );

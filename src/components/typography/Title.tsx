@@ -8,7 +8,7 @@ interface ITitleProps {
 }
 const Title: React.FC<ITitleProps> = (props) => {
   const { children, className } = props;
-  return <p className={classNames({ '': true, className })}>{children}</p>;
+  return <p className={classNames({ 'mb-1': true, className })}>{children}</p>;
 };
 
 export default Title;

@@ -1,19 +1,14 @@
-import React from "react";
-import {
-  useForm,
-  FormProvider,
-  SubmitHandler,
-  useFormContext,
-} from "react-hook-form";
-import { useSignUp } from "./utils";
-import InputField from "@/components/field/InputField";
-import { Button } from "@nextui-org/react";
-import ErrorText from "@/components/typography/ErrorText";
-import { Link } from "@nextui-org/link";
-import SelectField from "@/components/field/SelectField";
-import { signUpSchema } from "./SignUpForm.validation";
-import { yupResolver } from "@hookform/resolvers/yup";
-import toast, { Toaster } from "react-hot-toast";
+import React from 'react';
+import { useForm, FormProvider, SubmitHandler, useFormContext } from 'react-hook-form';
+import { useSignUp } from './utils';
+import InputField from '@/components/field/InputField';
+import { Button } from '@nextui-org/react';
+import ErrorText from '@/components/typography/ErrorText';
+import { Link } from '@nextui-org/link';
+import SelectField from '@/components/field/SelectField';
+import { signUpSchema } from './SignUpForm.validation';
+import { yupResolver } from '@hookform/resolvers/yup';
+import toast, { Toaster } from 'react-hot-toast';
 
 export interface ISignUpDto {
   email: string;
@@ -37,23 +32,18 @@ const SignUpForm = () => {
     formState: { errors },
   } = methods;
 
-  console.log("errors :>> ", errors);
-
-  const handleSubmitHandler: SubmitHandler<ISignUpDto> = async (
-    values: ISignUpDto
-  ) => {
-    console.log("values :>> ", values);
+  const handleSubmitHandler: SubmitHandler<ISignUpDto> = async (values: ISignUpDto) => {
     await mutateAsync(values);
   };
 
   const genderOptions = [
     {
-      label: "Male",
-      value: "male",
+      label: 'Male',
+      value: 'male',
     },
     {
-      label: "Female",
-      value: "female",
+      label: 'Female',
+      value: 'female',
     },
   ];
 

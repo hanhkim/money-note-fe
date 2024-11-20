@@ -15,11 +15,7 @@ import FieldSection from '@/components/field-section/FieldSection';
 import SelectField from '@/components/field/SelectField';
 import TextareaField from '@/components/field/TextareaField';
 import DatePickerField from '@/components/field/DatePickerField';
-import {
-  useGetCategoryList,
-  useGetWalletList,
-  useTransactionModal,
-} from './utils';
+import { useGetWalletList, useTransactionModal } from './utils';
 import {
   ITransactionDetailStore,
   ITransactionListStore,
@@ -28,9 +24,7 @@ import {
 } from '../transaction-list/transactionList.store';
 import RadioGroupField from '@/components/field/RadioGroupField';
 import { isMobile } from 'react-device-detect';
-import { useGetProfile } from '@/hooks/useGetProfile';
 import FontIcon from '@/components/icon/FontIcon';
-import SelectGroupField from '@/components/field/SelectGroupField';
 import CategoryModal from '@/components/category-modal/CategoryModal';
 
 interface ITransactionModal {
@@ -39,11 +33,7 @@ interface ITransactionModal {
   onClose?: () => void;
 }
 
-const TransactionModal: React.FC<ITransactionModal> = ({
-  isOpen,
-  placement,
-  onClose,
-}) => {
+const TransactionModal: React.FC<ITransactionModal> = ({ isOpen, placement, onClose }) => {
   const { wallets } = useGetWalletList();
 
   const openTransactionModal = useTransactionDetailStore(
@@ -69,10 +59,6 @@ const TransactionModal: React.FC<ITransactionModal> = ({
   const { onSubmit, control, reset, setValue, watch, handleDeleteTransaction } =
     useTransactionModal(handleClose);
 
-  const type = watch('type');
-
-  const { categories } = useGetCategoryList(type);
-
   const handleClickCancel = () => {
     handleClose();
     reset();
@@ -80,15 +66,15 @@ const TransactionModal: React.FC<ITransactionModal> = ({
 
   const isOpenModal = openTransactionModal || isOpen;
 
-  const handleChangeFile = (event: any) => {
-    if (event.target.files && event.target.files[0]) {
-      console.log('event.target :>> ', event.target.files);
-      const i = event.target.files[0];
-      setValue('img', i);
-    } else {
-      setValue('img', null);
-    }
-  };
+  // const handleChangeFile = (event: any) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     console.log('event.target :>> ', event.target.files);
+  //     const i = event.target.files[0];
+  //     setValue('img', i);
+  //   } else {
+  //     setValue('img', null);
+  //   }
+  // };
 
   return (
     <Modal
@@ -155,28 +141,21 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                         type="number"
                         placeholder="0.00"
                         labelPlacement="outside"
-                        size="lg"
+                        size="sm"
+                        classNames={{
+                          mainWrapper: 'h-12',
+                          innerWrapper: 'h-12',
+                          inputWrapper: 'h-12',
+                          input: 'h-12 text-base',
+                        }}
                         endContent={
                           <div className="pointer-events-none flex items-center">
-                            <span className="text-default-400 text-small">
-                              VND
-                            </span>
+                            <span className="text-default-400 text-small">VND</span>
                           </div>
                         }
                       />
                     }
                   />
-                  {/* <FieldSection
-                    title="Category"
-                    component={
-                      <SelectGroupField
-                        name="categoryId"
-                        control={control}
-                        options={categories}
-                      />
-                    }
-                  /> */}
-
                   <CategoryModal
                     isOpen={true}
                     onClose={() => {}}
@@ -193,15 +172,14 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                         control={control}
                         placeholder="Enter your description"
                         fullWidth
+                        size="sm"
                       />
                     }
                   />
 
                   <FieldSection
                     title="Date"
-                    component={
-                      <DatePickerField name="date" control={control} />
-                    }
+                    component={<DatePickerField name="date" control={control} />}
                   />
                   <FieldSection
                     title="For person"
@@ -215,9 +193,9 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                       />
                     }
                   />
-                  <div>
+                  {/* <div>
                     <input type="file" onChange={handleChangeFile} />
-                  </div>
+                  </div> */}
                 </div>
                 <Divider className="mt-4" />
                 <div className="mt-2 text-right">
@@ -225,9 +203,7 @@ const TransactionModal: React.FC<ITransactionModal> = ({
                     color="danger"
                     onPress={() => handleDeleteTransaction()}
                     variant="light"
-                    startContent={
-                      <FontIcon type="delete" className="text-base" />
-                    }
+                    startContent={<FontIcon type="delete" className="text-base" />}
                     size="sm"
                   >
                     Delete

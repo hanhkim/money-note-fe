@@ -1,7 +1,8 @@
-import { IWallet } from "@/models/Wallet.model";
-import BaseHttpService from "./base.service";
+import { IWallet } from '@/models/Wallet.model';
+import BaseHttpService from './base.service';
+import { IWalletTransferMoney } from '@/modules/wallets/wallet-transfer-to-others/utils';
 
-const path = "wallets";
+const path = 'wallets';
 
 class WalletService extends BaseHttpService {
   constructor() {
@@ -35,6 +36,11 @@ class WalletService extends BaseHttpService {
 
   setDefaultWallet = async (id: string): Promise<string> => {
     const result = await this.post(`${path}/set-default/${id}`);
+    return result;
+  };
+
+  transferMoney = async (data: IWalletTransferMoney): Promise<void> => {
+    const result = await this.post(`${path}/transfer-money`, data);
     return result;
   };
 }

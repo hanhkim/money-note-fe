@@ -1,15 +1,9 @@
-import {
-  Button,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@nextui-org/react";
-import dayjs from "dayjs";
-import React, { useState, FC, useEffect } from "react";
-import Calendar from "react-calendar";
-import FontIcon from "../icon/FontIcon";
-import "react-calendar/dist/Calendar.css";
+import { Button, Input, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import dayjs from 'dayjs';
+import React, { useState, FC, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import FontIcon from '../icon/FontIcon';
+import 'react-calendar/dist/Calendar.css';
 
 export interface IDatePicker {
   value: null | string;
@@ -42,11 +36,7 @@ const DatePicker: FC<IDatePicker> = ({ value, onChange }) => {
   const content = (
     <PopoverContent>
       <div className="p-4">
-        <Calendar
-          value={temp || selectedDate}
-          onChange={handleChange}
-          className="!border-0"
-        />
+        <Calendar value={temp || selectedDate} onChange={handleChange} className="!border-0" />
         <div className="flex mt-2 justify-end gap-1">
           <Button size="sm" onClick={handleCancel}>
             Cancel
@@ -72,10 +62,11 @@ const DatePicker: FC<IDatePicker> = ({ value, onChange }) => {
         <PopoverTrigger>
           <div>
             <Input
-              value={
-                selectedDate ? dayjs(selectedDate).format("DD/MM/YYYY") : ""
-              }
-              size="lg"
+              value={selectedDate ? dayjs(selectedDate).format('DD/MM/YYYY') : ''}
+              size="sm"
+              classNames={{
+                inputWrapper: 'h-12',
+              }}
               placeholder="DD/MM/YYYY"
               labelPlacement="outside"
               endContent={

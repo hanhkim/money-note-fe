@@ -1,6 +1,6 @@
-import BaseHttpService from "./base.service";
+import BaseHttpService from './base.service';
 
-const path = "categories";
+const path = 'categories';
 
 class CategoryService extends BaseHttpService {
   constructor() {
@@ -8,7 +8,7 @@ class CategoryService extends BaseHttpService {
   }
 
   getCategories = async (params?: any) => {
-    const result = await this.get(`${path}`, { params });
+    const result = await this.get(`${path}`);
 
     return result;
   };

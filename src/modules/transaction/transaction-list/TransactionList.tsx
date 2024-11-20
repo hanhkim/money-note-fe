@@ -1,49 +1,41 @@
-import React, { useMemo } from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Chip,
-  Listbox,
-  ListboxItem,
-} from "@nextui-org/react";
-import TransactionItem from "./TransactionItem";
-import { useGetTransactions } from "./utils";
-import { ITransaction } from "@/models/Transaction.model";
-import { sumBy } from "lodash";
-import dayjs from "dayjs";
-import updateLocale from "dayjs/plugin/updateLocale";
+import React, { useMemo } from 'react';
+import { Card, CardBody, CardHeader, Divider, Chip, Listbox, ListboxItem } from '@nextui-org/react';
+import TransactionItem from './TransactionItem';
+import { useGetTransactions } from './utils';
+import { ITransaction } from '@/models/Transaction.model';
+import { sumBy } from 'lodash';
+import dayjs from 'dayjs';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import {
   ITransactionDetailStore,
   ITransactionListStore,
   useTransactionDetailStore,
   useTransactionListStore,
-} from "./transactionList.store";
-import { useGetDetailTransaction } from "../transaction-detail/utils";
-import EmptyData from "@/components/empty-data/EmptyData";
-import { ETransactionType } from "@/enums/Transaction.enum";
-import classNames from "classnames";
-import { sum } from "lodash";
-import { convertNumberToCurrency } from "@/helpers/common.helpers";
-import AmountLabel from "@/components/amount-label/AmountLabel";
+} from './transactionList.store';
+import { useGetDetailTransaction } from '../transaction-detail/utils';
+import EmptyData from '@/components/empty-data/EmptyData';
+import { ETransactionType } from '@/enums/Transaction.enum';
+import classNames from 'classnames';
+import { sum } from 'lodash';
+import { convertNumberToCurrency } from '@/helpers/common.helpers';
+import AmountLabel from '@/components/amount-label/AmountLabel';
 
 dayjs.extend(updateLocale);
 
-dayjs.updateLocale("en", {
+dayjs.updateLocale('en', {
   months: [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ],
 });
 
@@ -54,10 +46,7 @@ const TransactionList = () => {
     month: state.month,
   }));
 
-  const transactionData = useMemo(
-    () => Object.entries(transactionsByDate),
-    [transactionsByDate]
-  );
+  const transactionData = useMemo(() => Object.entries(transactionsByDate), [transactionsByDate]);
 
   return (
     <div className="">
@@ -74,7 +63,7 @@ const TransactionList = () => {
           <EmptyData
             text={`You have not had any transactions in ${dayjs()
               .month(month)
-              .format("MMMM")}.\n Add transactions to track your expenses`}
+              .format('MMMM')}.\n Add transactions to track your expenses`}
           />
         )}
       </div>
@@ -89,10 +78,7 @@ export interface ITransactionBlock {
   date: string;
 }
 
-export const TransactionBlock: React.FC<ITransactionBlock> = ({
-  transactions,
-  date,
-}) => {
+export const TransactionBlock: React.FC<ITransactionBlock> = ({ transactions, date }) => {
   const setSelectedTransactionId = useTransactionDetailStore(
     (state: ITransactionDetailStore) => state.setSelectedTransactionId
   );
@@ -116,10 +102,7 @@ export const TransactionBlock: React.FC<ITransactionBlock> = ({
       <CardBody className="flex flex-col gap-4 p-2 px-0 py-0">
         <Listbox color="default" variant="faded">
           {transactions?.map((transaction: ITransaction) => (
-            <ListboxItem
-              key={transaction.id}
-              onClick={() => handleClickItem(transaction)}
-            >
+            <ListboxItem key={transaction.id} onClick={() => handleClickItem(transaction)}>
               <TransactionItem transaction={transaction} />
             </ListboxItem>
           ))}
@@ -133,27 +116,29 @@ export const TransactionDateHeader: React.FC<{
   transactions: ITransaction[];
   date: string;
 }> = ({ transactions, date }) => {
-  const sumAmount = transactions.reduce(
-    (sum: number, currentT: ITransaction) => {
-      if (currentT.type === ETransactionType.EARNING) {
-        return sum + Number(currentT.amount);
-      } else if (currentT.type === ETransactionType.EXPENSED) {
-        return sum - Number(currentT.amount);
-      }
-      return sum;
-    },
-    0
-  );
+  const sumAmount = transactions.reduce((sum: number, currentT: ITransaction) => {
+    if (currentT.type === ETransactionType.EARNING) {
+      return sum + Number(currentT.amount);
+    } else if (currentT.type === ETransactionType.EXPENSED) {
+      return sum - Number(currentT.amount);
+    }
+    return currentT.type === ETransactionType.BORROWED_LENT &&
+      ['Thu nợ'.toLowerCase(), 'Đi vay'.toLowerCase()].includes(
+        currentT.category?.name?.toLowerCase()
+      )
+      ? sum + Number(currentT.amount)
+      : sum - Number(currentT.amount);
+  }, 0);
 
   return (
     <>
       <div className="flex gap-3 items-center">
-        <div className="text-3xl text-slate-500">{dayjs(date).format("D")}</div>
+        <div className="text-3xl text-slate-500">{dayjs(date).format('D')}</div>
         <div>
-          <div className="text-base">{dayjs(date).format("MMMM, YYYY")}</div>
+          <div className="text-base">{dayjs(date).format('MMMM, YYYY')}</div>
           <div>
             <Chip variant="bordered" size="sm">
-              {dayjs(date).format("dddd")}
+              {dayjs(date).format('dddd')}
             </Chip>
           </div>
         </div>

@@ -1,8 +1,8 @@
-import React from "react";
-import { Radio, RadioGroup, cn, RadioProps } from "@nextui-org/react";
-import { Controller, Control } from "react-hook-form";
-import { ETransactionType } from "@/enums/Transaction.enum";
-import classNames from "classnames";
+import React from 'react';
+import { Radio, RadioGroup, cn, RadioProps } from '@nextui-org/react';
+import { Controller, Control } from 'react-hook-form';
+import { ETransactionType } from '@/enums/Transaction.enum';
+import classNames from 'classnames';
 
 export interface ISelectField {
   name: string;
@@ -32,11 +32,7 @@ const RadioGroupField: React.FC<ISelectField> = ({
       name={name}
       control={control}
       rules={rules}
-      render={({
-        field: { onBlur, onChange, value },
-        fieldState: { invalid, error },
-      }) => {
-        console.log("value :>> ", value);
+      render={({ field: { onBlur, onChange, value }, fieldState: { invalid, error } }) => {
         return (
           <RadioGroup
             label="Type"
@@ -44,8 +40,8 @@ const RadioGroupField: React.FC<ISelectField> = ({
             value={value}
             onChange={onChange}
             classNames={{
-              wrapper:
-                "grid grid-cols-3 gap-0 border-1 border-primary rounded-md",
+              wrapper: 'grid grid-cols-3 gap-0 border-1 border-primary rounded-md',
+              label: 'text-black',
             }}
           >
             <CustomRadio
@@ -90,17 +86,17 @@ export const CustomRadio: React.FC<ICustomRadioProps> = (props) => {
       {...otherProps}
       classNames={{
         base: cn(
-          "m-0 flex justify-center items-center grow-0 shrink-0",
-          "max-w-[300px] cursor-pointer border-2 border-transparent",
-          "data-[selected=true]:bg-primary [&_data-[selected=true]>span]:text-white !data-[selected=true]:text-white"
+          'm-0 flex justify-center items-center grow-0 shrink-0',
+          'max-w-[300px] cursor-pointer border-2 border-transparent',
+          'data-[selected=true]:bg-primary [&_data-[selected=true]>span]:text-white !data-[selected=true]:text-white'
         ),
-        wrapper: "hidden",
+        wrapper: 'hidden',
         label: `${classNames({
-          "label-custom text-sm text-primary": true,
-          "text-primary": !isSelected,
-          "text-white": isSelected,
+          'label-custom text-sm text-primary': true,
+          'text-primary': !isSelected,
+          'text-white': isSelected,
         })}`,
-        labelWrapper: "ml-0 text-white",
+        labelWrapper: 'ml-0 text-white',
       }}
       // className="grid grid-cols-3"
     >

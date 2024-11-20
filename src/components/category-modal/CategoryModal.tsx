@@ -1,14 +1,7 @@
 import React from 'react';
 
 import { useGetCategoryList } from '@/modules/transaction/transaction-detail/utils';
-import {
-  Avatar,
-  Divider,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from '@nextui-org/react';
+import { Avatar, Divider, Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import RadioGroupField from '../field/RadioGroupField';
 import { Control, useFormContext, useWatch } from 'react-hook-form';
 import FontIcon from '../icon/FontIcon';
@@ -17,6 +10,7 @@ import { ITransactionForm } from '@/models/Transaction.model';
 import * as _ from 'lodash';
 import { head } from 'lodash';
 import Title from '../typography/Title';
+import { ETransactionType } from '@/enums/Transaction.enum';
 
 interface ICategoryModalProps {
   isOpen: boolean;
@@ -30,14 +24,11 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props) => {
   const [isOpenModal, setIsOpenModal] = React.useState(false);
   const [selectedCategory, setSelectedCategory] = React.useState<any>(null);
 
-  const type = useWatch({ control, name: 'type' });
+  const type = useWatch({ control, name: 'type' }) as ETransactionType;
 
-  const { categories } = useGetCategoryList(type);
+  const { groupedList } = useGetCategoryList();
 
-  const groupedCategories = _.groupBy(
-    categories,
-    (category: any) => category.parentId
-  );
+  const groupedCategories = groupedList[type];
 
   const parentCategories = groupedCategories?.null || [];
 
@@ -53,10 +44,7 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props) => {
         }}
       >
         <div className="bg-slate-500 rounded-full w-9 h-9 p-1 text-center">
-          <FontIcon
-            type={category.icon as FontIconType}
-            className="text-white pt-[2px]"
-          />
+          <FontIcon type={category.icon as FontIconType} className="text-white pt-[2px]" />
         </div>
         <span>{category.name}</span>
       </div>
@@ -64,13 +52,10 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props) => {
   };
 
   return (
-    <>
+    <div>
       <Title>Category</Title>
-      {/* <Button onClick={() => setIsOpenModal(!isOpenModal)}>
-        click me: {selectedCategory?.label}
-      </button> */}
       <div
-        className="w-full bg-[rgb(244_244_245)] h-12 rounded-xl flex items-center justify-between px-4 cursor-pointer"
+        className="w-full bg-[rgb(244_244_245)] h-12 rounded-lg flex items-center justify-between px-4 cursor-pointer"
         onClick={() => setIsOpenModal(!isOpenModal)}
       >
         {selectedCategory ? (
@@ -122,39 +107,35 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props) => {
                   </div>
                 );
 
-                const items = (groupedCategories[category.id] || []).map(
-                  (category: any) => (
-                    <li key={category.id} className="category-tree__item">
-                      <div
-                        className="flex items-center cursor-pointer gap-2"
-                        onClick={() => {
-                          setSelectedCategory(category);
-                          setIsOpenModal(false);
-                        }}
-                      >
-                        <div className="bg-slate-500 rounded-full w-9 h-9 p-1 text-center">
-                          <FontIcon
-                            type={category.icon as FontIconType}
-                            className="text-white pt-[2px]"
-                          />
-                        </div>
-                        <span>{category.name}</span>
+                const items = (groupedCategories[category.id] || []).map((category: any) => (
+                  <li key={category.id} className="category-tree__item">
+                    <div
+                      className="flex items-center cursor-pointer gap-2"
+                      onClick={() => {
+                        setSelectedCategory(category);
+                        setIsOpenModal(false);
+                      }}
+                    >
+                      <div className="bg-slate-500 rounded-full w-9 h-9 p-1 text-center">
+                        <FontIcon
+                          type={category.icon as FontIconType}
+                          className="text-white pt-[2px]"
+                        />
                       </div>
-                    </li>
-                  )
-                );
+                      <span>{category.name}</span>
+                    </div>
+                  </li>
+                ));
 
                 return (
                   <>
                     {renderItem(category)}
                     <ul className="flex-col flex gap-3 category-tree">
-                      {(groupedCategories[category.id] || []).map(
-                        (item: any) => (
-                          <li key={category.id} className="category-tree__item">
-                            {renderItem(item)}
-                          </li>
-                        )
-                      )}
+                      {(groupedCategories[category.id] || []).map((item: any) => (
+                        <li key={category.id} className="category-tree__item">
+                          {renderItem(item)}
+                        </li>
+                      ))}
                     </ul>
                     <Divider />
                   </>
@@ -164,7 +145,7 @@ const CategoryModal: React.FC<ICategoryModalProps> = (props) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   );
 };
 

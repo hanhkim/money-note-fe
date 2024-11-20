@@ -1,47 +1,37 @@
-import React, { useMemo } from "react";
-import PropTypes from "prop-types";
-import { convertNumberToCurrency } from "@/helpers/common.helpers";
-import {
-  ITransactionListStore,
-  useTransactionListStore,
-} from "./transactionList.store";
-import {
-  useGetDetailTransaction,
-  useGetDetailWallet,
-} from "../transaction-detail/utils";
-import AmountLabel from "@/components/amount-label/AmountLabel";
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { convertNumberToCurrency } from '@/helpers/common.helpers';
+import { ITransactionListStore, useTransactionListStore } from './transactionList.store';
+import { useGetDetailTransaction, useGetDetailWallet } from '../transaction-detail/utils';
+import AmountLabel from '@/components/amount-label/AmountLabel';
 
 const TransactionSummary = () => {
-  const { selectedWalletId } = useTransactionListStore(
-    (state: ITransactionListStore) => ({
-      selectedWalletId: state.selectedWalletId,
-    })
-  );
+  const { selectedWalletId } = useTransactionListStore((state: ITransactionListStore) => ({
+    selectedWalletId: state.selectedWalletId,
+  }));
 
-  const { data: selectedWallet } = useGetDetailWallet(
-    selectedWalletId as string
-  );
+  const { data: selectedWallet } = useGetDetailWallet(selectedWalletId as string);
 
   const items = useMemo(
     () => [
       {
-        text: "Total income",
+        text: 'Total income',
         value: selectedWallet?.totalIncome,
       },
       {
-        text: "Total expense",
-        value: selectedWallet?.totalExpense,
+        text: 'Total expense',
+        value: 0 - +(selectedWallet?.totalExpense || 0),
       },
       {
-        text: "Total balance",
+        text: 'Total balance',
         value: selectedWallet?.amount,
       },
       {
-        text: "Transfer to other wallet",
+        text: 'Transfer to other wallet',
         value: selectedWallet?.transferAmount,
       },
       {
-        text: "Get money from other wallet",
+        text: 'Get money from other wallet',
         value: selectedWallet?.receiveAmount,
       },
       // {

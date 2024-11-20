@@ -1,5 +1,5 @@
-import FontIcon from "@/components/icon/FontIcon";
-import { IWallet } from "@/models/Wallet.model";
+import FontIcon from '@/components/icon/FontIcon';
+import { IWallet } from '@/models/Wallet.model';
 import {
   Button,
   Card,
@@ -11,9 +11,10 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@nextui-org/react";
-import classNames from "classnames";
-import React from "react";
+} from '@nextui-org/react';
+import classNames from 'classnames';
+import React, { useState } from 'react';
+import WalletTransferToOther from '../wallet-transfer-to-others/WalletTransferToOther';
 
 interface IWalletItemProps {
   isCreating?: boolean;
@@ -22,6 +23,7 @@ interface IWalletItemProps {
   onDelete?: () => void;
   onEditWallet?: () => void;
   onSetDefault?: () => void;
+  onTransferMoney?: () => void;
 }
 
 const WalletItem: React.FC<IWalletItemProps> = ({
@@ -31,18 +33,16 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   onDelete,
   onEditWallet,
   onSetDefault,
+  onTransferMoney,
 }) => {
   const isDefaultWallet = wallet?.isDefault;
-  console.log("isDefaultWallet :>> ", isDefaultWallet);
 
   const content = (
     <DropdownMenu
       aria-label="Dropdown Variants"
-      color={"primary"}
-      variant={"solid"}
-      disabledKeys={
-        isDefaultWallet ? ["set-default", "transfer", "delete"] : []
-      }
+      color={'primary'}
+      variant={'solid'}
+      disabledKeys={isDefaultWallet ? ['set-default', 'delete'] : []}
     >
       <DropdownItem key="edit" onClick={onEditWallet}>
         Chỉnh sửa ví
@@ -50,13 +50,10 @@ const WalletItem: React.FC<IWalletItemProps> = ({
       <DropdownItem key="set-default" onClick={onSetDefault}>
         Làm mặc định
       </DropdownItem>
-      <DropdownItem key="transfer">Chuyển sang ví khác</DropdownItem>
-      <DropdownItem
-        key="delete"
-        className="text-danger"
-        color="danger"
-        onClick={onDelete}
-      >
+      <DropdownItem key="transfer" onClick={onTransferMoney}>
+        Chuyển sang ví khác
+      </DropdownItem>
+      <DropdownItem key="delete" className="text-danger" color="danger" onClick={onDelete}>
         Xoá ví
       </DropdownItem>
     </DropdownMenu>
@@ -65,14 +62,14 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   const renderItem = () => {
     return (
       <Card
-        className={classNames("w-full", {
-          "bg-[#f0f8ff]": isDefaultWallet,
-          "bg-[#f0f8ff] border border-primary": isDefaultWallet,
+        className={classNames('w-full', {
+          'bg-[#f0f8ff]': isDefaultWallet,
+          'bg-[#f0f8ff] border border-primary': isDefaultWallet,
         })}
       >
         <CardBody>
           <div className="flex gap-4 items-center">
-            <FontIcon type={"wallet"} className="text-5xl" />
+            <FontIcon type={'wallet'} className="text-5xl" />
             <div className="flex flex-col justify-between w-full h-full">
               <div className="flex justify-between items-center w-full">
                 <h5>{wallet?.name}</h5>
@@ -109,9 +106,11 @@ const WalletItem: React.FC<IWalletItemProps> = ({
   };
 
   return (
-    <div className="sm:w-[300px] w-full h-[100px] rounded-2xl flex justify-center items-center">
-      {isCreating ? renderCreateItem() : renderItem()}
-    </div>
+    <>
+      <div className="sm:w-[300px] w-full h-[100px] rounded-2xl flex justify-center items-center">
+        {isCreating ? renderCreateItem() : renderItem()}
+      </div>
+    </>
   );
 };
 

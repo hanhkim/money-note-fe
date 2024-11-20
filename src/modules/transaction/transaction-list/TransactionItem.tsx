@@ -1,12 +1,12 @@
-import AmountLabel from "@/components/amount-label/AmountLabel";
-import FontIcon from "@/components/icon/FontIcon";
-import { FontIconType } from "@/components/icon/fontIconType";
-import { ETransactionType } from "@/enums/Transaction.enum";
-import { convertNumberToCurrency } from "@/helpers/common.helpers";
-import { ITransaction } from "@/models/Transaction.model";
-import classNames from "classnames";
-import Image from "next/image";
-import React from "react";
+import AmountLabel from '@/components/amount-label/AmountLabel';
+import FontIcon from '@/components/icon/FontIcon';
+import { FontIconType } from '@/components/icon/fontIconType';
+import { ETransactionType } from '@/enums/Transaction.enum';
+import { convertNumberToCurrency } from '@/helpers/common.helpers';
+import { ITransaction } from '@/models/Transaction.model';
+import classNames from 'classnames';
+import Image from 'next/image';
+import React from 'react';
 
 export interface ITransactionItem {
   transaction: ITransaction;
@@ -31,11 +31,20 @@ const TransactionItem: React.FC<ITransactionItem> = ({ transaction }) => {
       </div>
       <AmountLabel
         value={transaction.amount}
-        className={
-          transaction.type === ETransactionType.EXPENSED
-            ? "!text-red-500"
-            : "!text-green-800"
-        }
+        className={classNames({
+          '!text-green-800':
+            transaction.type === ETransactionType.EARNING ||
+            (transaction.type === ETransactionType.BORROWED_LENT &&
+              ['Thu nợ'.toLowerCase(), 'Đi vay'.toLowerCase()].includes(
+                transaction.category?.name?.toLowerCase()
+              )),
+          '!text-red-500':
+            transaction.type === ETransactionType.EXPENSED ||
+            (transaction.type === ETransactionType.BORROWED_LENT &&
+              ['Cho vay'.toLowerCase(), 'Trả nợ'.toLowerCase()].includes(
+                transaction.category?.name?.toLowerCase()
+              )),
+        })}
       />
     </div>
   );

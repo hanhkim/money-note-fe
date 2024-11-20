@@ -4,24 +4,22 @@ import axios, {
   AxiosRequestHeaders,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from "axios";
-import queryString from "query-string";
-import { set } from "lodash";
+} from 'axios';
+import queryString from 'query-string';
+import { set } from 'lodash';
 import {
   checkAccessTokenExpired,
   getAccessToken,
   getRefreshToken,
   redirectToLogout,
-} from "@/helpers/service.helpers";
+} from '@/helpers/service.helpers';
 
 const instance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   paramsSerializer: (params) => {
-    const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([_k, v]) => v)
-    );
-    console.log("filterParams :>> ", filteredParams);
-    return queryString.stringify(params, { arrayFormat: "comma" });
+    const filteredParams = Object.fromEntries(Object.entries(params).filter(([_k, v]) => v));
+
+    return queryString.stringify(params, { arrayFormat: 'comma' });
   },
 });
 
@@ -31,13 +29,13 @@ instance.interceptors.request.use(
     const accessToken = getAccessToken();
     const refreshToken = getRefreshToken();
     const headerConfig: AxiosRequestHeaders = new AxiosHeaders({
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=utf-8",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      Accept: 'application/json',
+      'Content-Type': 'application/json;charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       Authorization: `Bearer ${accessToken}`,
-      "R-Token": `${refreshToken}`,
+      'R-Token': `${refreshToken}`,
       ...headers,
     });
 
@@ -59,14 +57,11 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const { message, config: originalRequest, response, status } = error;
-    if (message === "Network Error") {
+    if (message === 'Network Error') {
       return Promise.reject(response.data);
     }
 
-    const isTokenExpired = checkAccessTokenExpired(
-      response.data,
-      response.status
-    );
+    const isTokenExpired = checkAccessTokenExpired(response.data, response.status);
 
     if (isTokenExpired) {
       await handleTokenExpired(instance, originalRequest);
@@ -87,21 +82,21 @@ class BaseHttpService {
 
   handleHttpError(error: any) {
     if (axios.isAxiosError(error) && !error?.response?.data) {
-      set(error, "response.data", {
+      set(error, 'response.data', {
         statusCode: error.response?.status,
         message: error.message,
       });
     }
     const { statusCode, message } = error.response.data;
     if (statusCode !== 401) {
-      throw new Error(message || error.message || "Unknown Error");
+      throw new Error(message || error.message || 'Unknown Error');
     } else {
       return this.handleUnauthorization();
     }
   }
 
   handleUnauthorization() {
-    console.log("Unauthorization");
+    console.log('Unauthorization');
   }
 
   getFullUrl(endpoint: string) {
@@ -110,7 +105,7 @@ class BaseHttpService {
 
   async get(endpoint: string, options = {}): Promise<any> {
     const fullUrl = `${this.baseUrl}/${endpoint}`;
-    console.log("options :>> ", options);
+    console.log('options :>> ', options);
     return this.instance.get(endpoint, options);
   }
 
@@ -126,7 +121,7 @@ class BaseHttpService {
 
   async delete(endpoint: string, options = {}): Promise<any> {
     // const fullUrl = this.getFullUrl(endpoint);
-    console.log("endpoint :>> ", endpoint);
+    console.log('endpoint :>> ', endpoint);
     return this.instance.delete(endpoint, options);
   }
 
@@ -145,17 +140,17 @@ export const getRefreshTokenService = async () => {
   const result = await axios2
     .get(refreshApi, {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=utf-8",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         Authorization: `Bearer ${refreshT}`,
       },
     })
     .then(function (response) {
-      console.log("response :>> ", response);
-      localStorage.setItem("accessToken", response.data?.accessToken);
+      console.log('response :>> ', response);
+      localStorage.setItem('accessToken', response.data?.accessToken);
       return response.data;
     })
     .catch(function (err) {
@@ -166,16 +161,13 @@ export const getRefreshTokenService = async () => {
 };
 
 ////////////////// helpers
-export const handleTokenExpired = async (
-  instance: AxiosInstance,
-  originalRequest: any
-) => {
+export const handleTokenExpired = async (instance: AxiosInstance, originalRequest: any) => {
   const accessToken = await getRefreshTokenService();
 
   if (!accessToken) {
-    return (window.location.href = "/login");
+    return (window.location.href = '/login');
   }
-  originalRequest.headers["Authorization"] = `Bearer ` + accessToken;
+  originalRequest.headers['Authorization'] = `Bearer ` + accessToken;
 
   return instance(originalRequest);
 };
